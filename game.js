@@ -68,15 +68,17 @@
     }
   ];
 
-  const DISHES = [
-    { emoji: "🍔", name: "The Classic Crypt", note: "extra pickles, no onions" },
-    { emoji: "🍔", name: "Double Tombstone", note: "make it messy" },
-    { emoji: "🍟", name: "Graveyard Combo", note: "fries extra crispy" },
-    { emoji: "🌭", name: "Cursed Chili Dawg", note: "sauce on the side" },
-    { emoji: "🥤", name: "Blood Shake", note: "strawberry, please" },
-    { emoji: "🍗", name: "Ghost Nugget Basket", note: "honey mustard x2" },
-    { emoji: "🍔", name: "Midnight Burger", note: "for here, not to go" },
-    { emoji: "🧀", name: "Cursed Cheese", note: "yes, more cheese" }
+  // The menu climbs one course at a time. Each shift starts back at buttered
+  // bread, then the kitchen works its way up to the Full Meal.
+  const MEALS = [
+    { name: "Buttered Bread", emoji: "🍞", note: "extra butter, cut on the diagonal", need: 3, price: 2.0, patience: 34, unlock: 0 },
+    { name: "Grilled Cheese", emoji: "🧀", note: "golden edges, no crusts", need: 5, price: 2.2, patience: 31, unlock: 2 },
+    { name: "Cold Cut Sandwich", emoji: "🥪", note: "thin sliced, extra mustard", need: 7, price: 2.4, patience: 29, unlock: 5 },
+    { name: "Crypt Burger", emoji: "🍔", note: "extra pickles, no onions", need: 10, price: 2.6, patience: 27, unlock: 9 },
+    { name: "Double Tombstone", emoji: "🍔", note: "two patties, make it messy", need: 13, price: 2.9, patience: 25, unlock: 14 },
+    { name: "Graveyard Combo", emoji: "🍟", note: "burger, fries, extra crispy", need: 17, price: 3.1, patience: 23, unlock: 20 },
+    { name: "Cursed Chili Dawg", emoji: "🌭", note: "chili, slaw, sauce on the side", need: 22, price: 3.3, patience: 21, unlock: 27 },
+    { name: "Full Meal", emoji: "🍱", note: "burger, fries, shake — all of it", need: 28, price: 3.6, patience: 19, unlock: 35 }
   ];
 
   const CUSTOMERS = [
@@ -152,6 +154,12 @@
       progress: (s) => [Math.min(s.franchises, 1), 1]
     },
     {
+      id: "full_meal", icon: "🍱", name: "Full Course",
+      desc: "Serve a Full Meal ticket.",
+      test: (s) => (s.fullMeals || 0) >= 1,
+      progress: (s) => [Math.min(s.fullMeals || 0, 1), 1]
+    },
+    {
       id: "regulars", icon: "📈", name: "Future Empire",
       desc: "Earn $5,000 all-time.",
       test: (s) => s.totalEarned >= 5000,
@@ -213,6 +221,11 @@
     starCount: document.getElementById("starCount"),
     shiftBadge: document.getElementById("shiftBadge"),
     sideSub: document.getElementById("sideSub"),
+    menuTierCount: document.getElementById("menuTierCount"),
+    menuBar: document.getElementById("menuBar"),
+    menuNow: document.getElementById("menuNow"),
+    menuNext: document.getElementById("menuNext"),
+    achTotalText: document.getElementById("achTotalText"),
     soundBtn: document.getElementById("soundBtn"),
     helpBtn: document.getElementById("helpBtn"),
     resetBtn: document.getElementById("resetBtn"),
@@ -240,6 +253,9 @@
   let hintTimer = 0;
   const seenOrders = new Set();
   let knownUnlocks = new Set();
+  let knownMealCount = 1;
+  let hiddenAt = 0;
+  let modalPausedAt = 0;
   let activeTab = "upgrades";
   let modalReturnFocus = null;
 
@@ -255,6 +271,8 @@
       clicks: 0,
       served: 0,
       runServed: 0,
+      fullMeals: 0,
+      walkouts: 0,
       heat: 0,
       bestHeat: 0,
       upgrades: { spatula: 0, grill: 0, sauce: 0, drivethru: 0, treats: 0 },
@@ -280,8 +298,8 @@
       const next = freshState();
       const numeric = [
         "cash", "totalEarned", "runEarned", "patties", "totalPatties", "clicks",
-        "served", "runServed", "heat", "bestHeat", "franchises", "zoomiesUntil", "zoomiesReadyAt",
-        "zoomiesUsed", "nextOrderId", "nextOrderAt", "lastSeen"
+        "served", "runServed", "fullMeals", "walkouts", "heat", "bestHeat", "franchises",
+        "zoomiesUntil", "zoomiesReadyAt", "zoomiesUsed", "nextOrderId", "nextOrderAt", "lastSeen"
       ];
       numeric.forEach((key) => {
         if (Number.isFinite(Number(saved[key]))) next[key] = Number(saved[key]);
@@ -301,19 +319,38 @@
       }
       if (typeof saved.sound === "boolean") next.sound = saved.sound;
       if (Array.isArray(saved.orders)) {
+        const now = Date.now();
         next.orders = saved.orders
           .filter((order) => order && Number.isFinite(Number(order.need)) && Number(order.need) > 0)
           .slice(0, MAX_ORDERS)
-          .map((order) => ({
-            id: Number(order.id) || next.nextOrderId++,
-            need: Math.max(1, Math.round(Number(order.need))),
-            progress: Math.max(0, Math.min(Number(order.progress) || 0, Number(order.need))),
-            reward: Math.max(1, Math.round(Number(order.reward) || 1)),
-            customer: String(order.customer || "Lost Soul"),
-            emoji: String(order.emoji || "🍔"),
-            dish: String(order.dish || "The Classic"),
-            note: String(order.note || "extra napkins")
-          }));
+          .map((order) => {
+            const need = Math.max(1, Math.round(Number(order.need)));
+            const savedMeal = Number(order.mealIndex);
+            const mealIndex = Number.isFinite(savedMeal)
+              ? Math.max(0, Math.min(MEALS.length - 1, Math.round(savedMeal)))
+              : 0;
+            const meal = MEALS[mealIndex];
+            const patience = Number(order.patience) > 0
+              ? Math.max(8, Math.min(120, Math.round(Number(order.patience))))
+              : meal.patience;
+            const savedExpiry = Number(order.expiresAt);
+            return {
+              id: Number(order.id) || next.nextOrderId++,
+              need,
+              progress: Math.max(0, Math.min(Number(order.progress) || 0, need)),
+              reward: Math.max(1, Math.round(Number(order.reward) || 1)),
+              customer: String(order.customer || "Lost Soul"),
+              emoji: String(order.emoji || meal.emoji),
+              dish: String(order.dish || meal.name),
+              note: String(order.note || meal.note),
+              mealIndex,
+              patience,
+              // Returning players get a fresh patience window, not an instant walkout.
+              expiresAt: Number.isFinite(savedExpiry) && savedExpiry > now + 1000
+                ? savedExpiry
+                : now + patience * 1000
+            };
+          });
       }
       return next;
     } catch (error) {
@@ -366,7 +403,8 @@
   }
 
   function orderInterval() {
-    return Math.max(3.2, 8.5 - state.upgrades.drivethru * 0.55);
+    const rush = Math.min(2.2, state.runServed * 0.035);
+    return Math.max(3.2, 8.5 - state.upgrades.drivethru * 0.55 - rush);
   }
 
   function franchiseGoal() {
@@ -381,21 +419,61 @@
     return Math.ceil(definition.base * Math.pow(definition.growth, state.upgrades[definition.id]));
   }
 
+  function unlockedMealCount() {
+    let count = 1;
+    MEALS.forEach((meal, index) => {
+      if (state.runServed >= meal.unlock) count = index + 1;
+    });
+    return count;
+  }
+
+  function pickMealIndex() {
+    const unlocked = Math.min(MEALS.length, unlockedMealCount());
+    const pool = [];
+    for (let index = Math.max(0, unlocked - 3); index < unlocked; index += 1) {
+      pool.push(index);
+    }
+    // Favor the newest course, but keep the last few on rotation.
+    const weights = pool.map((index, position) => Math.pow(1.9, position));
+    const total = weights.reduce((sum, weight) => sum + weight, 0);
+    let roll = Math.random() * total;
+    for (let index = 0; index < pool.length; index += 1) {
+      roll -= weights[index];
+      if (roll <= 0) return pool[index];
+    }
+    return pool[pool.length - 1];
+  }
+
+  function maybeAnnounceMealUnlock() {
+    const count = unlockedMealCount();
+    if (count <= knownMealCount) return;
+    knownMealCount = count;
+    const meal = MEALS[count - 1];
+    toast("New meal on the menu", `${meal.emoji} ${meal.name} unlocked. Bigger plates, bigger tips — and less patience.`, "📋", "achievement");
+    playUnlock();
+  }
+
   function makeOrder() {
-    const dish = DISHES[Math.floor(Math.random() * DISHES.length)];
+    const mealIndex = pickMealIndex();
+    const meal = MEALS[mealIndex];
     const customer = CUSTOMERS[Math.floor(Math.random() * CUSTOMERS.length)];
-    const need = Math.max(3, Math.round(3 + Math.pow(state.runServed, 0.72) * 0.55 + Math.random() * 2.8));
-    const unitPrice = 2.15 + Math.pow(state.runServed, 0.65) * 0.08;
-    const reward = Math.max(3, Math.round(need * unitPrice * tipMultiplier()));
+    const scaling = 1 + Math.pow(state.runServed, 0.78) * 0.025;
+    const need = Math.max(meal.need, Math.round(meal.need * scaling + Math.random() * 1.5));
+    const unitPrice = meal.price * (1 + Math.pow(state.runServed, 0.58) * 0.05);
+    const reward = Math.max(2, Math.round(need * unitPrice * tipMultiplier()));
+    const patience = Math.max(12, meal.patience - Math.floor(state.runServed / 16));
     return {
       id: state.nextOrderId++,
       need,
       progress: 0,
       reward,
       customer,
-      emoji: dish.emoji,
-      dish: dish.name,
-      note: dish.note
+      emoji: meal.emoji,
+      dish: meal.name,
+      note: meal.note,
+      mealIndex,
+      patience,
+      expiresAt: patienceNow() + patience * 1000
     };
   }
 
@@ -415,6 +493,7 @@
   }
 
   function processPatties() {
+    expireOrders(patienceNow());
     const events = [];
     let applied = false;
     let safety = 0;
@@ -462,6 +541,8 @@
     state.runEarned += earned;
     state.served += 1;
     state.runServed += 1;
+    if (order.mealIndex >= MEALS.length - 1) state.fullMeals += 1;
+    maybeAnnounceMealUnlock();
     state.heat = Math.min(100, state.heat + 2.4);
     state.bestHeat = Math.max(state.bestHeat, state.heat);
     if (state.served === 1) {
@@ -563,7 +644,8 @@
           const seen = seenOrders.has(order.id);
           seenOrders.add(order.id);
           const percent = Math.min(100, (order.progress / order.need) * 100);
-          return `<article class="ticket${index === 0 ? " is-active" : ""}${seen ? " is-static" : ""}" data-order-id="${order.id}">
+          const mealIndex = Math.max(0, Math.min(MEALS.length - 1, Number(order.mealIndex) || 0));
+          return `<article class="ticket${index === 0 ? " is-active" : ""}${seen ? " is-static" : ""}${mealIndex === MEALS.length - 1 ? " is-feast" : ""}" data-order-id="${order.id}">
             <div class="ticket-top">
               <span class="ticket-no">#${String(order.id).padStart(3, "0")}</span>
               <span class="ticket-cust">${escapeHTML(order.customer)}</span>
@@ -571,13 +653,14 @@
             </div>
             <div class="ticket-main">
               <span class="ticket-emoji" aria-hidden="true">${order.emoji}</span>
-              <div class="ticket-dish"><b>${escapeHTML(order.dish)}</b><small>${order.need} patties</small></div>
+              <div class="ticket-dish"><b>${escapeHTML(order.dish)}</b><small>Tier ${mealIndex + 1} · ${order.need} patties</small></div>
             </div>
             <div class="ticket-progress-row">
               <span class="ticket-track"><i style="width:${percent}%"></i></span>
               <span class="ticket-count">${Math.min(order.need, Math.floor(order.progress))} / ${order.need}</span>
             </div>
             <div class="ticket-note">“${escapeHTML(order.note)}”</div>
+            <span class="ticket-timer" aria-hidden="true"><i style="width:100%"></i></span>
           </article>`;
         }).join("");
         const emptySlots = Math.max(0, MAX_ORDERS - state.orders.length);
@@ -591,24 +674,101 @@
     updateOrderBars();
   }
 
+  function clocksPaused() {
+    return Boolean(hiddenAt || modalPausedAt);
+  }
+
+  function patienceNow() {
+    return modalPausedAt || hiddenAt || Date.now();
+  }
+
+  function pauseClocks() {
+    if (!modalPausedAt) modalPausedAt = Date.now();
+  }
+
+  function resumeClocks() {
+    if (!modalPausedAt) return;
+    const pausedFor = Math.max(0, Date.now() - modalPausedAt);
+    modalPausedAt = 0;
+    state.orders.forEach((order) => {
+      if (Number.isFinite(order.expiresAt)) order.expiresAt += pausedFor;
+    });
+    state.nextOrderAt += pausedFor;
+  }
+
   function updateOrderBars() {
+    const now = patienceNow();
     state.orders.forEach((order, index) => {
       const node = orderNode(order.id);
       if (!node) return;
       const bar = node.querySelector(".ticket-track i");
       const count = node.querySelector(".ticket-count");
+      const timer = node.querySelector(".ticket-timer");
+      const timerFill = timer ? timer.querySelector("i") : null;
       const percent = Math.min(100, (order.progress / order.need) * 100);
       if (bar) bar.style.width = `${percent}%`;
       if (count) {
         const shown = Math.min(order.need, Math.floor(order.progress + 0.00001));
         count.textContent = `${shown} / ${order.need}`;
       }
+      let ratio = 1;
+      if (timerFill) {
+        const total = Math.max(1, (Number(order.patience) || 30) * 1000);
+        const remaining = Math.max(0, Math.min(total, (Number(order.expiresAt) || 0) - now));
+        ratio = remaining / total;
+        timerFill.style.width = `${ratio * 100}%`;
+        timer.classList.toggle("is-warn", ratio <= 0.5 && ratio > 0.25);
+        timer.classList.toggle("is-danger", ratio <= 0.25);
+      }
       node.classList.toggle("is-active", index === 0);
+      node.classList.toggle("is-urgent", ratio <= 0.25);
     });
   }
 
   function orderNode(id) {
     return el.tickets.querySelector(`[data-order-id="${id}"]`);
+  }
+
+  function expireOrders(now = Date.now()) {
+    if (!state.orders.length) return;
+    const lost = [];
+    for (let index = state.orders.length - 1; index >= 0; index -= 1) {
+      const order = state.orders[index];
+      if (!Number.isFinite(order.expiresAt) || now < order.expiresAt) continue;
+      const node = orderNode(order.id);
+      const rect = node ? node.getBoundingClientRect() : null;
+      lost.push({ order, rect });
+      state.orders.splice(index, 1);
+    }
+    if (!lost.length) return;
+
+    state.walkouts += lost.length;
+    state.heat = Math.max(0, state.heat - 16 * lost.length);
+    lastOrderSignature = "";
+    renderOrders();
+    showPetBubble("hiss!");
+
+    const sceneRect = el.scene.getBoundingClientRect();
+    lost.forEach(({ order, rect }) => {
+      let x = sceneRect.width / 2;
+      let y = sceneRect.height * 0.25;
+      if (rect && rect.width > 0) {
+        x = rect.left - sceneRect.left + rect.width / 2;
+        y = rect.top - sceneRect.top + rect.height / 2;
+      }
+      floatText("walked out", x, y, "lost");
+      stamp("cold", x, y + 21, "is-walkout");
+    });
+
+    const first = lost[0].order;
+    toast(
+      lost.length === 1 ? "A soul walked out" : `${lost.length} souls walked out`,
+      lost.length === 1
+        ? `${first.customer}'s ${first.dish} went cold. Watch the patience bars.`
+        : "The queue went cold. Keep the grill moving and watch the patience bars.",
+      "💨"
+    );
+    playRest();
   }
 
   function showServeEffect(event) {
@@ -644,9 +804,9 @@
     window.setTimeout(() => node.remove(), 1000);
   }
 
-  function stamp(text, x, y) {
+  function stamp(text, x, y, className = "") {
     const node = document.createElement("span");
-    node.className = "serve-stamp";
+    node.className = `serve-stamp ${className}`.trim();
     node.textContent = text;
     node.style.left = `${x}px`;
     node.style.top = `${y}px`;
@@ -739,6 +899,8 @@
     }
 
     el.stockCount.textContent = formatNumber(Math.floor(state.totalPatties));
+    updateOrderBars();
+    renderMenuClimb();
     upgradeAffordability();
     checkUpgradeUnlocks();
     renderFranchise();
@@ -779,6 +941,20 @@
     el.franchiseBonusPreview.textContent = `+${Math.round((state.franchises + 1) * 35)}%`;
     el.franchiseNextPreview.textContent = `Shift ${String(state.franchises + 2).padStart(2, "0")}`;
     el.franchiseModalText.textContent = `You have banked ${money(state.runEarned)} this shift. Raising the next crypt resets cash, stock, and upgrades, keeps every badge, and adds a permanent +${Math.round((state.franchises + 1) * 35)}% to taps, auto-grill, and tickets.`;
+  }
+
+  function renderMenuClimb() {
+    const unlocked = Math.min(MEALS.length, unlockedMealCount());
+    const current = MEALS[unlocked - 1];
+    const next = MEALS[unlocked];
+    if (el.menuTierCount) el.menuTierCount.textContent = `${unlocked} / ${MEALS.length}`;
+    if (el.menuBar) el.menuBar.style.width = `${(unlocked / MEALS.length) * 100}%`;
+    if (el.menuNow) el.menuNow.textContent = `${current.emoji} ${current.name}`;
+    if (el.menuNext) {
+      el.menuNext.textContent = next
+        ? `Next: ${next.name} · ${Math.max(0, next.unlock - state.runServed)} serves`
+        : "Full Meal unlocked";
+    }
   }
 
   function renderUpgrades() {
@@ -879,6 +1055,7 @@
     el.achSummaryCount.textContent = String(count);
     el.achSummaryBar.style.width = `${(count / ACHIEVEMENTS.length) * 100}%`;
     el.achCount.textContent = String(count);
+    if (el.achTotalText) el.achTotalText.textContent = `of ${ACHIEVEMENTS.length} badges earned`;
   }
 
   function checkAchievements() {
@@ -916,7 +1093,9 @@
     state.orders = [];
     state.nextOrderAt = Date.now() + 6000;
     state.lastSeen = Date.now();
+    modalPausedAt = 0;
     knownUnlocks = new Set(UPGRADES.filter((item) => item.unlock(state)).map((item) => item.id));
+    knownMealCount = unlockedMealCount();
     bodyZoom(false);
     seedOrders(2);
     lastOrderSignature = "";
@@ -941,11 +1120,13 @@
     try { localStorage.removeItem(SAVE_KEY); } catch (error) { /* no storage, no problem */ }
     state = freshState();
     state.sound = sound;
+    modalPausedAt = 0;
     document.body.classList.toggle("muted", !state.sound);
     el.soundBtn.setAttribute("aria-label", state.sound ? "Mute sound" : "Enable sound");
     el.soundBtn.title = state.sound ? "Mute sound" : "Enable sound";
     offlineReport = null;
     knownUnlocks = new Set(UPGRADES.filter((item) => item.unlock(state)).map((item) => item.id));
+    knownMealCount = unlockedMealCount();
     seedOrders(2);
     lastOrderSignature = "";
     lastCash = -1;
@@ -982,6 +1163,7 @@
     if (!layer) return;
     modalReturnFocus = document.activeElement;
     layer.hidden = false;
+    pauseClocks();
     document.body.classList.add("modal-open");
     if (layer === el.franchiseModal) renderFranchise();
     const close = layer.querySelector(".modal-close");
@@ -993,6 +1175,7 @@
     layer.hidden = true;
     if (![el.helpModal, el.franchiseModal, el.resetModal].some((item) => !item.hidden)) {
       document.body.classList.remove("modal-open");
+      resumeClocks();
     }
     if (modalReturnFocus && typeof modalReturnFocus.focus === "function") {
       modalReturnFocus.focus();
@@ -1003,6 +1186,7 @@
   function closeAllModals() {
     [el.helpModal, el.franchiseModal, el.resetModal].forEach((layer) => { layer.hidden = true; });
     document.body.classList.remove("modal-open");
+    resumeClocks();
   }
 
   function toast(title, detail, icon = "⭐", variant = "") {
@@ -1023,8 +1207,9 @@
     const rate = state.upgrades.grill * 0.65 * franchiseMultiplier();
     if (rate <= 0) return;
     const seconds = Math.min(elapsed, 4 * 60 * 60);
-    const averageNeed = Math.max(4, 5 + Math.pow(state.runServed, 0.72) * 0.55);
-    const averageTicket = averageNeed * (2.15 + Math.pow(state.runServed, 0.65) * 0.08) * tipMultiplier();
+    const meal = MEALS[Math.max(0, unlockedMealCount() - 1)];
+    const averageNeed = Math.max(meal.need, meal.need * (1 + Math.pow(state.runServed, 0.78) * 0.025));
+    const averageTicket = averageNeed * meal.price * (1 + Math.pow(state.runServed, 0.58) * 0.05) * tipMultiplier();
     const autoPatties = rate * seconds;
     const capacity = (seconds / orderInterval()) * 0.72;
     const served = Math.max(0, Math.min(autoPatties / averageNeed, capacity));
@@ -1045,6 +1230,7 @@
     seedOrders(state.orders.length ? state.orders.length : 2);
     if (state.orders.length > MAX_ORDERS) state.orders.length = MAX_ORDERS;
     knownUnlocks = new Set(UPGRADES.filter((item) => item.unlock(state)).map((item) => item.id));
+    knownMealCount = unlockedMealCount();
     document.body.classList.toggle("muted", !state.sound);
     el.soundBtn.setAttribute("aria-label", state.sound ? "Mute sound" : "Enable sound");
     el.soundBtn.title = state.sound ? "Mute sound" : "Enable sound";
@@ -1134,7 +1320,21 @@
     });
 
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden) saveState();
+      if (document.hidden) {
+        hiddenAt = Date.now();
+        saveState();
+        return;
+      }
+      if (hiddenAt) {
+        // Pause the patience clocks while the tab is in the background.
+        const pausedFor = Math.max(0, Date.now() - hiddenAt);
+        hiddenAt = 0;
+        state.orders.forEach((order) => {
+          if (Number.isFinite(order.expiresAt)) order.expiresAt += pausedFor;
+        });
+        state.nextOrderAt += pausedFor;
+        lastFrame = performance.now();
+      }
     });
     window.addEventListener("beforeunload", saveState);
     window.addEventListener("blur", () => saveState());
@@ -1149,6 +1349,8 @@
       state.heat = Math.max(0, state.heat - 5.15 * dt);
     }
 
+    expireOrders(patienceNow());
+
     const auto = autoRate();
     if (auto > 0) {
       state.patties += auto * dt;
@@ -1156,7 +1358,7 @@
       processPatties();
     }
 
-    if (now >= state.nextOrderAt) {
+    if (!clocksPaused() && now >= state.nextOrderAt) {
       if (state.orders.length < MAX_ORDERS) {
         state.orders.push(makeOrder());
         lastOrderSignature = "";

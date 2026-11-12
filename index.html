@@ -348,7 +348,7 @@
               <span class="live-dot"></span>
               <span>Restless orders</span>
               <span class="rail-count" id="queueCount">2 / 3</span>
-              <span class="rail-hint">paid when filled</span>
+              <span class="rail-hint">patience ticking</span>
             </div>
             <div class="tickets" id="tickets"></div>
           </div>
@@ -498,6 +498,17 @@
             <span class="shift-badge" id="shiftBadge">SHIFT 01</span>
           </div>
           <p id="sideSub">Spend souls on the line. Every upgrade makes the next rush a little easier.</p>
+          <div class="menu-climb" aria-label="Menu progression">
+            <div class="menu-climb-top">
+              <span>Menu climb</span>
+              <b id="menuTierCount">1 / 8</b>
+            </div>
+            <div class="menu-climb-track"><i id="menuBar"></i></div>
+            <div class="menu-climb-foot">
+              <span id="menuNow">🍞 Buttered Bread</span>
+              <span id="menuNext">Next: Grilled Cheese · 2 serves</span>
+            </div>
+          </div>
         </div>
 
         <div class="tabs" role="tablist" aria-label="Panels">
@@ -515,7 +526,7 @@
 
         <div class="panel" id="achievementPanel" role="tabpanel" aria-labelledby="tabAchievements" hidden>
           <div class="ach-summary">
-            <div><b id="achSummaryCount">0</b><span>of 12 badges earned</span></div>
+            <div><b id="achSummaryCount">0</b><span id="achTotalText">of 13 badges earned</span></div>
             <div class="ach-progress"><i id="achSummaryBar"></i></div>
           </div>
           <div class="ach-list" id="achList"></div>
@@ -552,14 +563,14 @@
       <h2 id="helpTitle">Run the midnight shift.</h2>
       <p class="modal-lead">The Graveyard Grill is open until dawn. The regulars are restless, the hellfire is hot, and Nugget is technically the manager.</p>
       <div class="how-list">
-        <div class="how-step"><span>01</span><div><b>Cook the cursed patties</b><p>Tap the burger or press <kbd>Space</kbd>. Every tap fills the oldest ticket. Upgrades add haunted auto-grill output.</p></div></div>
-        <div class="how-step"><span>02</span><div><b>Cash the souls</b><p>When a ticket fills, it pays out automatically. Keep the queue moving before the dead get impatient.</p></div></div>
+        <div class="how-step"><span>01</span><div><b>Cook the cursed patties</b><p>Tap the burger or press <kbd>Space</kbd>. Every tap fills the oldest ticket. The menu starts at buttered bread and climbs all the way to the Full Meal.</p></div></div>
+        <div class="how-step"><span>02</span><div><b>Beat the patience clock</b><p>Filled tickets pay out automatically. Every ticket has a patience bar — if it empties, the soul walks out and the hellfire drops.</p></div></div>
         <div class="how-step"><span>03</span><div><b>Stoke the hellfire</b><p>Fast tapping heats the meter and multiplies every ticket payout. It cools down when you stop.</p></div></div>
         <div class="how-step"><span>04</span><div><b>Send in the ghost cat</b><p>Tap Nugget or press <kbd>Z</kbd> for Zoomies: double output for a short burst. Spirit treats make it last longer and hit harder.</p></div></div>
       </div>
       <div class="modal-tip">
         <span aria-hidden="true">★</span>
-        <p>Unlock upgrades as you serve more souls, then raise a new crypt to reset the shift with a permanent bonus. Achievements stick around forever.</p>
+        <p>Each course unlocks as you serve souls. Bigger plates need more patties and leave less time. Raise a new crypt to restart the menu climb with a permanent bonus — achievements stick around forever.</p>
       </div>
       <div class="modal-actions">
         <button class="text-btn" id="resetBtn" type="button">Erase save</button>
