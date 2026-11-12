@@ -8,55 +8,55 @@
   const UPGRADES = [
     {
       id: "spatula",
-      name: "Sizzle Spatula",
+      name: "Bone Spatula",
       icon: "🥄",
       tone: "",
-      desc: "Smash another patty with every tap.",
+      desc: "Smash another cursed patty with every tap.",
       base: 14,
       growth: 1.6,
       unlock: () => true,
       unlockShort: "",
-      effect: (level) => `+${1 + level} → +${2 + level} per tap`
+      effect: (level) => `+${1 + level} / tap → +${2 + level} / tap`
     },
     {
       id: "grill",
-      name: "Second Grill",
+      name: "Haunted Grill",
       icon: "🍳",
       tone: "mint",
       desc: "A hands-free grill keeps patties moving.",
       base: 28,
       growth: 1.64,
       unlock: (s) => s.served >= 1,
-      unlockShort: "Serve 1",
+      unlockShort: "Feed 1",
       effect: (level) => `${(level * 0.65).toFixed(1)} → ${((level + 1) * 0.65).toFixed(1)} / sec`
     },
     {
       id: "sauce",
-      name: "Secret Sauce",
+      name: "Grave Gravy",
       icon: "🧂",
       tone: "coral",
       desc: "A little drizzle raises every ticket.",
       base: 115,
       growth: 2.05,
       unlock: (s) => s.served >= 5,
-      unlockShort: "Serve 5",
-      effect: (level) => `+${Math.round(level * 22)}% → +${Math.round((level + 1) * 22)}% tips`
+      unlockShort: "Feed 5",
+      effect: (level) => `+${Math.round(level * 22)}% → +${Math.round((level + 1) * 22)}% souls`
     },
     {
       id: "drivethru",
-      name: "Drive-Thru Lane",
+      name: "Hearse Lane",
       icon: "🚗",
       tone: "blue",
-      desc: "More regulars, less waiting between tickets.",
+      desc: "More restless regulars, less waiting between tickets.",
       base: 95,
       growth: 2.12,
       unlock: (s) => s.served >= 10,
-      unlockShort: "Serve 10",
+      unlockShort: "Feed 10",
       effect: (level) => `${Math.max(3.2, 8.5 - level * 0.55).toFixed(1)}s → ${Math.max(3.2, 8.5 - (level + 1) * 0.55).toFixed(1)}s / ticket`
     },
     {
       id: "treats",
-      name: "Corgi Treats",
+      name: "Spirit Treats",
       icon: "🦴",
       tone: "",
       desc: "Nugget goes harder. Zoomies hit stronger.",
@@ -69,19 +69,19 @@
   ];
 
   const DISHES = [
-    { emoji: "🍔", name: "The Classic", note: "extra pickles, no onions" },
-    { emoji: "🍔", name: "Double Smash", note: "make it messy" },
-    { emoji: "🍟", name: "Fryday Combo", note: "fries extra crispy" },
-    { emoji: "🌭", name: "Chili Dawg", note: "sauce on the side" },
-    { emoji: "🥤", name: "Shake & Stack", note: "strawberry, please" },
-    { emoji: "🍗", name: "Nugget Basket", note: "honey mustard x2" },
-    { emoji: "🍔", name: "Big Night Burger", note: "for here, not to go" },
-    { emoji: "🧀", name: "Cheese Freak", note: "yes, more cheese" }
+    { emoji: "🍔", name: "The Classic Crypt", note: "extra pickles, no onions" },
+    { emoji: "🍔", name: "Double Tombstone", note: "make it messy" },
+    { emoji: "🍟", name: "Graveyard Combo", note: "fries extra crispy" },
+    { emoji: "🌭", name: "Cursed Chili Dawg", note: "sauce on the side" },
+    { emoji: "🥤", name: "Blood Shake", note: "strawberry, please" },
+    { emoji: "🍗", name: "Ghost Nugget Basket", note: "honey mustard x2" },
+    { emoji: "🍔", name: "Midnight Burger", note: "for here, not to go" },
+    { emoji: "🧀", name: "Cursed Cheese", note: "yes, more cheese" }
   ];
 
   const CUSTOMERS = [
-    "Marisol", "Big Tony", "Night Owl", "Rae", "Coach", "Dee", "Luz", "Jules",
-    "Sam", "Nora", "Tiny", "Bea", "Moe", "Kit", "Pops", "Iris", "Alex", "June"
+    "Morticia", "Igor", "Lenore", "Vlad", "Hazel", "Ophelia", "Bram", "Wednesday",
+    "Salem", "Nyx", "Tiny", "Bea", "Moe", "Kit", "Pops", "Iris", "Alex", "June"
   ];
 
   const ACHIEVEMENTS = [
@@ -98,26 +98,26 @@
       progress: (s) => [Math.min(s.served, 1), 1]
     },
     {
-      id: "good_dog", icon: "🐾", name: "Good Dog",
+      id: "good_dog", icon: "🐾", name: "Good Familiar",
       desc: "Use Nugget's Zoomies once.",
       test: (s) => s.zoomiesUsed >= 1,
       progress: (s) => [Math.min(s.zoomiesUsed, 1), 1]
     },
     {
-      id: "side_hustle", icon: "🔧", name: "Side Hustle",
-      desc: "Buy your first kitchen upgrade.",
+      id: "side_hustle", icon: "🔧", name: "Grave Goods",
+      desc: "Buy your first crypt upgrade.",
       test: (s) => totalUpgrades(s) >= 1,
       progress: (s) => [Math.min(totalUpgrades(s), 1), 1]
     },
     {
-      id: "ten_orders", icon: "🍟", name: "Regular Crowd",
+      id: "ten_orders", icon: "🍟", name: "Restless Crowd",
       desc: "Serve 10 tickets.",
       test: (s) => s.served >= 10,
       progress: (s) => [Math.min(s.served, 10), 10]
     },
     {
-      id: "hot_stuff", icon: "🔥", name: "Hot Stuff",
-      desc: "Fill the Sizzle meter to the top.",
+      id: "hot_stuff", icon: "🔥", name: "Hellfire",
+      desc: "Fill the Hellfire meter to the top.",
       test: (s) => s.bestHeat >= 92,
       progress: (s) => [Math.min(s.bestHeat, 92), 92]
     },
@@ -146,8 +146,8 @@
       progress: (s) => [Math.min(totalUpgrades(s), 10), 10]
     },
     {
-      id: "franchise", icon: "⭐", name: "Franchise Owner",
-      desc: "Open your first franchise.",
+      id: "franchise", icon: "⭐", name: "Crypt Owner",
+      desc: "Raise your first crypt.",
       test: (s) => s.franchises >= 1,
       progress: (s) => [Math.min(s.franchises, 1), 1]
     },
@@ -160,8 +160,8 @@
   ];
 
   const LOCATION_NAMES = [
-    "The Original", "Neon Alley", "The Corner", "Uptown Smash", "Last Stop",
-    "The Late Shift", "Lucky Number 7", "Downtown Heat", "The Night Market"
+    "The Original Crypt", "Bone Alley", "The Corner Tomb", "Uptown Crypt", "Last Stop",
+    "The Late Shift", "Lucky Number 7", "Downtown Crypt", "The Night Market"
   ];
 
   const el = {
@@ -309,7 +309,7 @@
             need: Math.max(1, Math.round(Number(order.need))),
             progress: Math.max(0, Math.min(Number(order.progress) || 0, Number(order.need))),
             reward: Math.max(1, Math.round(Number(order.reward) || 1)),
-            customer: String(order.customer || "Regular"),
+            customer: String(order.customer || "Lost Soul"),
             emoji: String(order.emoji || "🍔"),
             dish: String(order.dish || "The Classic"),
             note: String(order.note || "extra napkins")
@@ -524,7 +524,7 @@
     if (now < state.zoomiesReadyAt) {
       const wait = Math.ceil((state.zoomiesReadyAt - now) / 1000);
       showPetBubble(`resting ${wait}s`);
-      toast("Nugget is catching a breath", `${wait}s until the next Zoomies.`, "🐾");
+      toast("Nugget is fading out", `${wait}s until the next Zoomies.`, "🐾");
       playRest();
       return;
     }
@@ -532,7 +532,7 @@
     state.zoomiesReadyAt = now + COOLDOWN_BASE + state.upgrades.treats * 650;
     state.zoomiesUsed += 1;
     bodyZoom(true);
-    showPetBubble(["BORK!", "ZOOM!", "LET'S GO!"][Math.floor(Math.random() * 3)]);
+    showPetBubble(["MEOW!", "ZOOM!", "LET'S HAUNT!"][Math.floor(Math.random() * 3)]);
     toast("Zoomies activated!", `Nugget doubles output for ${(zoomDuration() / 1000).toFixed(0)} seconds.`, "⚡", "achievement");
     const r = el.scene.getBoundingClientRect();
     confetti(14, r.width * 0.2, r.height * 0.7);
@@ -557,7 +557,7 @@
     const signature = state.orders.map((order) => order.id).join("|");
     if (signature !== lastOrderSignature) {
       if (state.orders.length === 0) {
-        el.tickets.innerHTML = `<div class="no-tickets">No tickets yet — the next regular is walking in.</div>`;
+        el.tickets.innerHTML = `<div class="no-tickets">No tickets yet — the next restless soul is drifting in.</div>`;
       } else {
         const tickets = state.orders.map((order, index) => {
           const seen = seenOrders.has(order.id);
@@ -582,7 +582,7 @@
         }).join("");
         const emptySlots = Math.max(0, MAX_ORDERS - state.orders.length);
         el.tickets.innerHTML = tickets + Array.from({ length: emptySlots }, () => (
-          `<div class="ticket-empty" aria-hidden="true"><span>Next regular</span><small>walking in…</small></div>`
+          `<div class="ticket-empty" aria-hidden="true"><span>Next soul</span><small>drifting in…</small></div>`
         )).join("");
       }
       lastOrderSignature = signature;
@@ -625,12 +625,12 @@
     stamp("Served", x, y + 21);
     crumbs(x, y + 9, 10);
     if (event.bonus >= 1) {
-      floatText(`sizzle +${money(event.bonus)}`, x, y + 53, "served");
+      floatText(`hellfire +${money(event.bonus)}`, x, y + 53, "served");
     }
     bumpCash();
     playServe();
     if (state.served === 1) {
-      window.setTimeout(() => toast("First ticket served!", "Tips are in. Upgrade the kitchen or see what unlocks next.", "🧾"), 320);
+      window.setTimeout(() => toast("First soul served!", "Souls are in. Upgrade the crypt or see what unlocks next.", "🧾"), 320);
     }
   }
 
@@ -731,11 +731,11 @@
     el.heatTrack.setAttribute("aria-valuenow", String(Math.round(heat)));
     el.sizzleMult.textContent = `x${sizzleMultiplier().toFixed(2)}`;
     if (heat >= 90) {
-      el.heatHint.textContent = "On fire · maximum tip bonus";
+      el.heatHint.textContent = "Inferno · maximum soul bonus";
     } else if (heat > 0.5) {
-      el.heatHint.textContent = "Keep it hot for bigger tips";
+      el.heatHint.textContent = "Keep the hellfire high";
     } else {
-      el.heatHint.textContent = "Tap fast to boost order tips";
+      el.heatHint.textContent = "Tap fast to stoke the hellfire";
     }
 
     el.stockCount.textContent = formatNumber(Math.floor(state.totalPatties));
@@ -766,19 +766,19 @@
     el.franchiseCard.classList.toggle("ready", ready);
     el.franchiseName.textContent = LOCATION_NAMES[Math.min(state.franchises, LOCATION_NAMES.length - 1)];
     el.franchiseDesc.textContent = ready
-      ? "The books are healthy. Reset this shift and open a new location with a permanent boost."
-      : `Bank ${money(goal)} this shift to unlock location #${state.franchises + 2}. Badges stay forever.`;
+      ? "The crypt is thriving. Reset this shift and raise a new location with a permanent boost."
+      : `Bank ${money(goal)} this shift to raise crypt #${state.franchises + 2}. Badges stay forever.`;
     el.franchiseBar.style.width = `${Math.min(100, (state.runEarned / goal) * 100)}%`;
     el.franchiseProgress.textContent = `${money(Math.floor(state.runEarned))} / ${money(goal)}`;
     el.franchiseBtn.disabled = !ready;
-    el.franchiseBtn.textContent = ready ? `Open #${state.franchises + 2}` : "Locked";
+    el.franchiseBtn.textContent = ready ? `Raise #${state.franchises + 2}` : "Locked";
     el.shiftBadge.textContent = `SHIFT ${String(state.franchises + 1).padStart(2, "0")}`;
     el.sideSub.textContent = state.franchises > 0
-      ? `Location ${state.franchises + 1}: ${LOCATION_NAMES[Math.min(state.franchises, LOCATION_NAMES.length - 1)]}. Your permanent bonus is +${Math.round(state.franchises * 35)}%.`
-      : "Spend tips on the line. Every upgrade makes the next rush a little easier.";
+      ? `Crypt ${state.franchises + 1}: ${LOCATION_NAMES[Math.min(state.franchises, LOCATION_NAMES.length - 1)]}. Your permanent bonus is +${Math.round(state.franchises * 35)}%.`
+      : "Spend souls on the line. Every upgrade makes the next rush a little easier.";
     el.franchiseBonusPreview.textContent = `+${Math.round((state.franchises + 1) * 35)}%`;
     el.franchiseNextPreview.textContent = `Shift ${String(state.franchises + 2).padStart(2, "0")}`;
-    el.franchiseModalText.textContent = `You have banked ${money(state.runEarned)} this shift. Opening the next location resets cash, stock, and kitchen upgrades, keeps every badge, and adds a permanent +${Math.round((state.franchises + 1) * 35)}% to taps, auto-grill, and tickets.`;
+    el.franchiseModalText.textContent = `You have banked ${money(state.runEarned)} this shift. Raising the next crypt resets cash, stock, and upgrades, keeps every badge, and adds a permanent +${Math.round((state.franchises + 1) * 35)}% to taps, auto-grill, and tickets.`;
   }
 
   function renderUpgrades() {
@@ -845,7 +845,7 @@
           { duration: 180, easing: "ease-out" }
         );
       }
-      toast("Not enough tips", `${money(cost - state.cash)} more to afford ${definition.name}.`, "💸");
+      toast("Not enough souls", `${money(cost - state.cash)} more to afford ${definition.name}.`, "💸");
       return;
     }
     state.cash -= cost;
@@ -901,7 +901,7 @@
   function doFranchise() {
     if (state.runEarned < franchiseGoal()) {
       closeModal(el.franchiseModal);
-      toast("Not ready yet", "Keep serving until the franchise goal is filled.", "📒");
+      toast("Not ready yet", "Keep serving until the crypt goal is filled.", "📒");
       return;
     }
     state.franchises += 1;
@@ -927,7 +927,7 @@
     renderAchievements();
     closeModal(el.franchiseModal);
     confetti(30, el.scene.getBoundingClientRect().width * 0.5, el.scene.getBoundingClientRect().height * 0.25);
-    toast("New FRYDAY opened!", `Shift ${state.franchises + 1} is live. Permanent bonus: +${Math.round(state.franchises * 35)}%.`, "⭐", "achievement");
+    toast("New crypt raised!", `Shift ${state.franchises + 1} is live. Permanent bonus: +${Math.round(state.franchises * 35)}%.`, "⭐", "achievement");
     playFranchise();
     checkAchievements();
     saveState();
@@ -937,8 +937,13 @@
   }
 
   function resetGame() {
+    const sound = state.sound;
     try { localStorage.removeItem(SAVE_KEY); } catch (error) { /* no storage, no problem */ }
     state = freshState();
+    state.sound = sound;
+    document.body.classList.toggle("muted", !state.sound);
+    el.soundBtn.setAttribute("aria-label", state.sound ? "Mute sound" : "Enable sound");
+    el.soundBtn.title = state.sound ? "Mute sound" : "Enable sound";
     offlineReport = null;
     knownUnlocks = new Set(UPGRADES.filter((item) => item.unlock(state)).map((item) => item.id));
     seedOrders(2);
@@ -957,7 +962,7 @@
     el.firstHint.classList.remove("is-hidden");
     el.rankPill.hidden = true;
     el.cashAmount.textContent = "0";
-    toast("Fresh kitchen", "New shift, clean grill, same good dog.", "🧽");
+    toast("Fresh crypt", "New shift, clean grill, same ghost cat.", "🧽");
     saveState();
   }
 
@@ -1055,7 +1060,7 @@
     bindEvents();
     if (offlineReport) {
       window.setTimeout(() => {
-        toast("Welcome back", `Nugget kept the grill warm: +${money(offlineReport.gain)} from ${offlineReport.served} tickets.`, "🌙", "achievement");
+        toast("Welcome back", `Nugget kept the hellfire burning: +${money(offlineReport.gain)} from ${offlineReport.served} tickets.`, "🌙", "achievement");
         checkAchievements();
       }, 550);
     }

@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0c1514">
-  <title>FRYDAY — Midnight Burger Shift</title>
-  <meta name="description" content="A cozy incremental cooking game. Smash patties, serve the late-night rush, and unlock the whole kitchen with Nugget the corgi.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23f05b3d'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='58'%3E%F0%9F%8D%94%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0a0610">
+  <title>FRYDAY — Graveyard Grill</title>
+  <meta name="description" content="A gothic incremental cooking game. Smash cursed patties, feed the restless dead, and raise your crypt empire with Nugget the ghost cat.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23170d20'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='58'%3E%F0%9F%92%80%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,40 +18,41 @@
       <div class="brand">
         <div class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 48 48">
-            <path d="M11 20c1-8 7-12 13-12s12 4 13 12H11Z" fill="#ffd67a"/>
-            <path d="M10 22h28c1.6 0 2.6 1.2 2.4 2.6l-.5 3.1c-.2 1-1 1.7-2 1.7H10.1c-1 0-1.8-.7-2-1.7l-.5-3.1C7.4 23.2 8.4 22 10 22Z" fill="#74c69d"/>
-            <path d="M10 30h28l-.8 5c-.2 1.3-1.2 2-2.5 2H13.3c-1.3 0-2.3-.7-2.5-2L10 30Z" fill="#a96237"/>
-            <path d="M9 38h30c1.4 0 2.3 1 2.1 2.3l-.2 1.3c-.2 1.2-1.1 1.9-2.3 1.9H9.4c-1.2 0-2.1-.7-2.3-1.9l-.2-1.3C6.7 39 7.6 38 9 38Z" fill="#ffbe55"/>
-            <g fill="#fff3d3">
+            <path d="M11 20c1-8 7-12 13-12s12 4 13 12H11Z" fill="#8f6fa6"/>
+            <path d="M10 22h28c1.6 0 2.6 1.2 2.4 2.6l-.5 3.1c-.2 1-1 1.7-2 1.7H10.1c-1 0-1.8-.7-2-1.7l-.5-3.1C7.4 23.2 8.4 22 10 22Z" fill="#8fc56f"/>
+            <path d="M10 30h28l-.8 5c-.2 1.3-1.2 2-2.5 2H13.3c-1.3 0-2.3-.7-2.5-2L10 30Z" fill="#4b2738"/>
+            <path d="M9 38h30c1.4 0 2.3 1 2.1 2.3l-.2 1.3c-.2 1.2-1.1 1.9-2.3 1.9H9.4c-1.2 0-2.1-.7-2.3-1.9l-.2-1.3C6.7 39 7.6 38 9 38Z" fill="#8f6fa6"/>
+            <g fill="#d6ffb0">
               <ellipse cx="17" cy="14" rx="1.2" ry=".7" transform="rotate(-18 17 14)"/>
               <ellipse cx="25" cy="12" rx="1.2" ry=".7" transform="rotate(14 25 12)"/>
               <ellipse cx="31" cy="16" rx="1.2" ry=".7" transform="rotate(-8 31 16)"/>
               <ellipse cx="21" cy="17" rx="1.2" ry=".7" transform="rotate(10 21 17)"/>
             </g>
+            <path d="m19 21 2 5 2-5m4 0 2 5 2-5" fill="none" stroke="#f3ecd8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="brand-copy">
           <div class="brand-line"><span class="brand-name">FRYDAY</span><span class="rank-pill" id="rankPill" hidden>★ <b id="rankCount">1</b></span></div>
-          <span class="brand-sub">Midnight Burger Shift</span>
+          <span class="brand-sub">Graveyard Grill · Open Til Dawn</span>
         </div>
       </div>
 
       <div class="top-hud">
         <div class="cash-block">
-          <span class="micro-label">Tonight's tips</span>
+          <span class="micro-label">Crypt cash</span>
           <strong class="cash-value" id="cashValue"><span class="cash-sign">$</span><span id="cashAmount">0</span></strong>
         </div>
         <div class="hud-divider" aria-hidden="true"></div>
         <div class="mini-stat">
-          <span>Per tap</span>
+          <span>Per smash</span>
           <b id="tapStat">+1</b>
         </div>
         <div class="mini-stat wide-stat">
-          <span>Auto grill</span>
+          <span>Haunted grill</span>
           <b id="autoStat">0.0/s</b>
         </div>
         <div class="mini-stat served-stat">
-          <span>Served</span>
+          <span>Souls served</span>
           <b id="servedStat">0</b>
         </div>
       </div>
@@ -68,64 +69,68 @@
     </header>
 
     <main class="game-shell">
-      <section class="stage" aria-label="Kitchen">
+      <section class="stage" aria-label="Crypt kitchen">
         <div class="scene" id="scene">
           <svg class="scene-art" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <defs>
               <linearGradient id="wallGrad" x1="0" y1="0" x2=".8" y2="1">
-                <stop offset="0" stop-color="#f8dfb2"/>
-                <stop offset=".5" stop-color="#f2c98f"/>
-                <stop offset="1" stop-color="#e6b576"/>
+                <stop offset="0" stop-color="#2c2139"/>
+                <stop offset=".5" stop-color="#1e1630"/>
+                <stop offset="1" stop-color="#120c1e"/>
               </linearGradient>
               <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#163b37"/>
-                <stop offset="1" stop-color="#0d2725"/>
+                <stop offset="0" stop-color="#1a1424"/>
+                <stop offset="1" stop-color="#08060e"/>
               </linearGradient>
               <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#f7f8f3"/>
-                <stop offset=".3" stop-color="#c9d3cf"/>
-                <stop offset=".7" stop-color="#97a7a2"/>
-                <stop offset="1" stop-color="#677872"/>
+                <stop offset="0" stop-color="#d8d0c0"/>
+                <stop offset=".3" stop-color="#a49a8a"/>
+                <stop offset=".7" stop-color="#726a60"/>
+                <stop offset="1" stop-color="#49423c"/>
               </linearGradient>
               <linearGradient id="steelDark" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#536762"/>
-                <stop offset="1" stop-color="#263733"/>
+                <stop offset="0" stop-color="#4a4058"/>
+                <stop offset="1" stop-color="#221a2c"/>
               </linearGradient>
               <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#243f61"/>
-                <stop offset=".45" stop-color="#d6685d"/>
-                <stop offset=".73" stop-color="#f7a15d"/>
-                <stop offset="1" stop-color="#ffd89c"/>
+                <stop offset="0" stop-color="#080b24"/>
+                <stop offset=".45" stop-color="#241a44"/>
+                <stop offset=".73" stop-color="#4c2c5c"/>
+                <stop offset="1" stop-color="#8a4f70"/>
               </linearGradient>
               <linearGradient id="sunsetGlass" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#ffffff" stop-opacity=".27"/>
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".2"/>
                 <stop offset=".6" stop-color="#ffffff" stop-opacity="0"/>
               </linearGradient>
               <radialGradient id="lampGlow" cx=".5" cy=".2" r=".7">
-                <stop offset="0" stop-color="#fff6c6" stop-opacity=".95"/>
-                <stop offset=".35" stop-color="#ffd87a" stop-opacity=".3"/>
-                <stop offset="1" stop-color="#ffd87a" stop-opacity="0"/>
+                <stop offset="0" stop-color="#ffe9b0" stop-opacity=".95"/>
+                <stop offset=".35" stop-color="#e8b05a" stop-opacity=".3"/>
+                <stop offset="1" stop-color="#e8b05a" stop-opacity="0"/>
               </radialGradient>
               <radialGradient id="warmGlow" cx=".5" cy=".5" r=".5">
-                <stop offset="0" stop-color="#ff9a4e" stop-opacity=".55"/>
-                <stop offset="1" stop-color="#ff9a4e" stop-opacity="0"/>
+                <stop offset="0" stop-color="#b45bd6" stop-opacity=".5"/>
+                <stop offset="1" stop-color="#b45bd6" stop-opacity="0"/>
               </radialGradient>
               <pattern id="subway" width="82" height="40" patternUnits="userSpaceOnUse">
-                <rect width="82" height="40" fill="#e6d1ad"/>
-                <path d="M0 .5h82M0 20.5h82M0 40.5h82" stroke="#c5ad86" stroke-width="1.5"/>
-                <path d="M.5 0v20M41.5 20v20M82.5 0v20" stroke="#c5ad86" stroke-width="1.5"/>
-                <path d="M2 2h36" stroke="#fff5df" stroke-opacity=".45" stroke-width="2"/>
+                <rect width="82" height="40" fill="#2a2233"/>
+                <path d="M0 .5h82M0 20.5h82M0 40.5h82" stroke="#3d3348" stroke-width="1.5"/>
+                <path d="M.5 0v20M41.5 20v20M82.5 0v20" stroke="#3d3348" stroke-width="1.5"/>
+                <path d="M2 2h36" stroke="#6a5a78" stroke-opacity=".32" stroke-width="2"/>
               </pattern>
               <pattern id="floorTile" width="130" height="72" patternUnits="userSpaceOnUse" patternTransform="skewX(-17)">
-                <rect width="130" height="72" fill="#123330"/>
-                <path d="M0 .5h130M0 36.5h130M0 72.5h130M0 0v72M65 0v36M130 0v72" stroke="#2e5750" stroke-opacity=".55" stroke-width="2"/>
-                <path d="M6 6h54" stroke="#7ab4a5" stroke-opacity=".11" stroke-width="2"/>
+                <rect width="130" height="72" fill="#151020"/>
+                <path d="M0 .5h130M0 36.5h130M0 72.5h130M0 0v72M65 0v36M130 0v72" stroke="#2c2238" stroke-opacity=".7" stroke-width="2"/>
+                <path d="M6 6h54" stroke="#6a5a88" stroke-opacity=".12" stroke-width="2"/>
               </pattern>
               <filter id="neonBlur" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="4"/>
               </filter>
               <filter id="softShadow" x="-20%" y="-20%" width="140%" height="160%">
-                <feDropShadow dx="0" dy="12" stdDeviation="8" flood-color="#55240d" flood-opacity=".28"/>
+                <feDropShadow dx="0" dy="12" stdDeviation="8" flood-color="#0a0612" flood-opacity=".55"/>
+              </filter>
+              <filter id="spiritGlow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="4" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
               </filter>
               <clipPath id="windowClip">
                 <rect x="55" y="168" width="246" height="196" rx="13"/>
@@ -134,164 +139,205 @@
 
             <!-- back wall -->
             <rect width="1000" height="520" fill="url(#wallGrad)"/>
-            <g opacity=".17" stroke="#a87543" stroke-width="1">
+            <g opacity=".22" stroke="#4a3a58" stroke-width="1">
               <path d="M74 0v520M202 0v520M330 0v520M458 0v520M586 0v520M714 0v520M842 0v520M970 0v520"/>
             </g>
-            <ellipse cx="495" cy="120" rx="460" ry="260" fill="url(#warmGlow)" opacity=".38"/>
+            <g opacity=".14" fill="#8f6fa6">
+              <path d="M0 0h1000v18H0Z"/>
+              <path d="M0 62h1000v3H0Z"/>
+            </g>
+            <ellipse cx="495" cy="120" rx="460" ry="260" fill="url(#warmGlow)" opacity=".5"/>
 
             <!-- pendant light -->
-            <path d="M635 0v80" stroke="#44372c" stroke-width="3"/>
-            <path d="M596 80h78l-10 27h-58l-10-27Z" fill="#29423d"/>
-            <ellipse cx="635" cy="109" rx="26" ry="8" fill="#ffe7a5"/>
-            <ellipse cx="635" cy="205" rx="160" ry="180" fill="url(#lampGlow)" opacity=".35"/>
+            <path d="M635 0v80" stroke="#2a2233" stroke-width="3"/>
+            <path d="M596 80h78l-10 27h-58l-10-27Z" fill="#241a2e"/>
+            <path d="M604 107h62" stroke="#4a3a58" stroke-width="2"/>
+            <ellipse cx="635" cy="109" rx="26" ry="8" fill="#ffd98a"/>
+            <ellipse cx="635" cy="205" rx="160" ry="180" fill="url(#lampGlow)" opacity=".3"/>
+            <path d="M618 109c-4 9-4 17 0 25M635 111v26M652 109c4 9 4 17 0 25" stroke="#e8b05a" stroke-width="2" stroke-linecap="round" opacity=".35"/>
 
             <!-- window -->
             <g filter="url(#softShadow)">
-              <rect x="42" y="155" width="272" height="222" rx="19" fill="#6b4e35"/>
-              <rect x="50" y="163" width="256" height="206" rx="14" fill="#39595b"/>
+              <rect x="42" y="155" width="272" height="222" rx="19" fill="#3a2c48"/>
+              <rect x="50" y="163" width="256" height="206" rx="14" fill="#1a1230"/>
             </g>
             <g clip-path="url(#windowClip)">
               <rect x="55" y="168" width="246" height="196" fill="url(#sky)"/>
-              <circle cx="224" cy="263" r="32" fill="#ffe4a4" opacity=".9"/>
-              <path d="M42 310h72v-54h37v31h48v-72h31v41h88v74H42Z" fill="#223c45" opacity=".7"/>
-              <path d="M42 337h310v52H42Z" fill="#1b313a" opacity=".82"/>
-              <g fill="#ffce7c" opacity=".84">
+              <g fill="#e8e2ff">
+                <circle cx="80" cy="195" r="1.2"/><circle cx="118" cy="184" r="1"/><circle cx="152" cy="201" r="1.4"/>
+                <circle cx="188" cy="181" r="1"/><circle cx="233" cy="196" r="1.3"/><circle cx="268" cy="183" r="1"/>
+                <circle cx="101" cy="221" r=".9"/><circle cx="207" cy="215" r="1.1"/><circle cx="280" cy="228" r=".9"/>
+              </g>
+              <circle cx="224" cy="263" r="32" fill="#e8e2ff" opacity=".9"/>
+              <circle cx="213" cy="254" r="6" fill="#c9c0e6" opacity=".55"/>
+              <circle cx="235" cy="272" r="4" fill="#c9c0e6" opacity=".45"/>
+              <circle cx="228" cy="250" r="3" fill="#c9c0e6" opacity=".4"/>
+              <path d="M42 310h72v-54h37v31h48v-72h31v41h88v74H42Z" fill="#120d20" opacity=".85"/>
+              <path d="M42 337h310v52H42Z" fill="#0a0714" opacity=".9"/>
+              <g fill="#a8e6d0" opacity=".7">
                 <rect x="67" y="280" width="7" height="11"/><rect x="84" y="296" width="7" height="11"/><rect x="127" y="271" width="7" height="11"/>
                 <rect x="155" y="290" width="7" height="11"/><rect x="206" y="278" width="7" height="11"/><rect x="246" y="295" width="7" height="11"/>
               </g>
-              <path d="M55 305c38-12 63 4 91-3s48-17 73-9 47 7 82-1v67H55Z" fill="#12292f" opacity=".84"/>
+              <g fill="#08050e">
+                <path d="M78 326v-27h17v27Z"/><path d="M83 299c0-8 7-8 7 0Z"/>
+                <path d="M108 330v-20h13v20Z"/><path d="M111 310c0-6 7-6 7 0Z"/>
+                <path d="M146 324v-32h19v32Z"/><path d="M150 292c0-9 11-9 11 0Z"/>
+                <path d="M255 331v-24h15v24Z"/><path d="M259 307c0-7 8-7 8 0Z"/>
+              </g>
+              <path d="M228 340v-58m-14 16 14-16 12 13m-24-2-12-11m36 4 12-12" stroke="#08050e" stroke-width="4" stroke-linecap="round"/>
+              <g fill="#08050e">
+                <path d="M124 242c-6-5-13-4-17 1 5 1 8 4 9 8 2-4 5-7 8-9Zm7 4c6-5 13-4 17 1-5 1-8 4-9 8-2-4-5-7-8-9Z"/>
+                <path d="M170 228c-5-4-11-3-14 1 4 1 7 3 8 7 1-4 3-6 6-8Zm6 3c5-4 11-3 14 1-4 1-7 3-8 7-1-4-3-6-6-8Z"/>
+              </g>
+              <path d="M55 305c38-12 63 4 91-3s48-17 73-9 47 7 82-1v67H55Z" fill="#08050e" opacity=".9"/>
               <path d="M55 168h246v196H55Z" fill="url(#sunsetGlass)"/>
-              <path d="M55 168h246" stroke="#ffe3a4" stroke-opacity=".4" stroke-width="2"/>
-              <path d="m55 250 246-62v32L55 289Z" fill="#fff" opacity=".07"/>
-              <path d="m55 300 246-98v14L55 340Z" fill="#fff" opacity=".06"/>
+              <path d="M55 168h246" stroke="#b9a8e0" stroke-opacity=".35" stroke-width="2"/>
+              <path d="m55 250 246-62v32L55 289Z" fill="#fff" opacity=".05"/>
+              <path d="m55 300 246-98v14L55 340Z" fill="#fff" opacity=".04"/>
             </g>
-            <rect x="171" y="163" width="9" height="206" fill="#79583b"/>
-            <rect x="50" y="263" width="256" height="8" fill="#79583b"/>
-            <path d="M44 156h268" stroke="#ffe8c0" stroke-opacity=".55" stroke-width="2"/>
+            <rect x="171" y="163" width="9" height="206" fill="#3f3050"/>
+            <rect x="50" y="263" width="256" height="8" fill="#3f3050"/>
+            <path d="M44 156h268" stroke="#cbb8e8" stroke-opacity=".4" stroke-width="2"/>
+
+            <!-- cobwebs -->
+            <g fill="none" stroke="#b9b09c" stroke-opacity=".22" stroke-width="1.2">
+              <path d="M0 0h54M0 0v46M10 0v18M24 0v10M36 0v6M0 10h18M0 24h10M0 36h6"/>
+              <path d="M1000 0h-54M1000 0v46M990 0v18M976 0v10M964 0v6M1000 10h-18M1000 24h-10M1000 36h-6"/>
+              <path d="M0 700h40M0 700v-34M10 700v-12M0 690h12"/>
+            </g>
 
             <!-- little shelf under window -->
-            <path d="M39 355h280v11H39Z" fill="#8e5d39"/>
-            <path d="M60 366v18M298 366v18" stroke="#684229" stroke-width="7"/>
+            <path d="M39 355h280v11H39Z" fill="#3a2b45"/>
+            <path d="M60 366v18M298 366v18" stroke="#241a2e" stroke-width="7"/>
             <g filter="url(#softShadow)">
-              <rect x="75" y="320" width="32" height="35" rx="5" fill="#e45232"/>
-              <rect x="81" y="313" width="20" height="10" rx="3" fill="#c6b08b"/>
-              <path d="M112 327h27v28h-27Z" fill="#f5d169"/>
-              <path d="M116 320h19v10h-19Z" fill="#e4c05a"/>
-              <rect x="183" y="326" width="44" height="29" rx="4" fill="#6e9c82"/>
-              <path d="M190 332h30M190 339h23M190 346h27" stroke="#e8f3dd" stroke-width="2" opacity=".5"/>
+              <rect x="75" y="320" width="32" height="35" rx="5" fill="#6a2a44"/>
+              <rect x="81" y="313" width="20" height="10" rx="3" fill="#b9b09c"/>
+              <path d="M112 327h27v28h-27Z" fill="#6a7a3e"/>
+              <path d="M116 320h19v10h-19Z" fill="#4e5c2e"/>
+              <rect x="183" y="326" width="44" height="29" rx="4" fill="#3c5a50"/>
+              <path d="M190 332h30M190 339h23M190 346h27" stroke="#bfe6d6" stroke-width="2" opacity=".45"/>
+              <path d="M146 328c0-10 12-10 12 0v27h-12Z" fill="#2a2233"/>
+              <path d="M152 316c-5-5 1-10 0-14 4 4 6 9 0 14Z" fill="#8fe6c8"/>
+              <circle cx="152" cy="326" r="2" fill="#ffd98a" opacity=".8"/>
             </g>
 
             <!-- neon sign -->
             <g transform="translate(745 165) rotate(2.4)">
-              <rect x="0" y="0" width="205" height="112" rx="15" fill="#233b38" stroke="#916b45" stroke-width="7"/>
-              <rect x="9" y="9" width="187" height="94" rx="10" fill="#152925" stroke="#f5c16a" stroke-width="2"/>
-              <text x="102" y="49" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="30" letter-spacing="1" fill="#ff8f63" opacity=".55" filter="url(#neonBlur)">OPEN</text>
-              <text x="102" y="49" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="30" letter-spacing="1" fill="#ffd3b1">OPEN</text>
-              <text x="102" y="87" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="23" letter-spacing="3" fill="#ffd46f" opacity=".7" filter="url(#neonBlur)">LATE</text>
-              <text x="102" y="87" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif" font-size="23" letter-spacing="3" fill="#fff1ba">LATE</text>
+              <rect x="0" y="0" width="205" height="112" rx="15" fill="#1b1428" stroke="#5a4a6e" stroke-width="7"/>
+              <rect x="9" y="9" width="187" height="94" rx="10" fill="#100a18" stroke="#8fe6c8" stroke-width="2"/>
+              <text x="102" y="49" text-anchor="middle" font-family="Pirata One, Archivo Black, serif" font-size="38" letter-spacing="2" fill="#ff5a7a" opacity=".6" filter="url(#neonBlur)">CRYPT</text>
+              <text x="102" y="49" text-anchor="middle" font-family="Pirata One, Archivo Black, serif" font-size="38" letter-spacing="2" fill="#ffd7e2">CRYPT</text>
+              <text x="102" y="87" text-anchor="middle" font-family="Pirata One, Archivo Black, serif" font-size="24" letter-spacing="3" fill="#8ef0c8" opacity=".75" filter="url(#neonBlur)">TIL DAWN</text>
+              <text x="102" y="87" text-anchor="middle" font-family="Pirata One, Archivo Black, serif" font-size="24" letter-spacing="3" fill="#d8fff0">TIL DAWN</text>
             </g>
-            <path d="M767 149c-8-13 6-18-1-31M818 145c8-14-6-20 1-33" stroke="#f8cf84" stroke-width="3" stroke-linecap="round" opacity=".22"/>
+            <path d="M767 149c-8-13 6-18-1-31M818 145c8-14-6-20 1-33" stroke="#8fe6c8" stroke-width="3" stroke-linecap="round" opacity=".2"/>
 
             <!-- hood and tiled pass -->
             <g filter="url(#softShadow)">
               <path d="M308 208h392l-29 65H337l-29-65Z" fill="url(#steel)"/>
               <path d="M323 267h362v17H323Z" fill="url(#steelDark)"/>
-              <path d="M359 208h290" stroke="#fff" stroke-opacity=".55" stroke-width="3"/>
-              <path d="M360 231h206M350 249h254" stroke="#566660" stroke-opacity=".28" stroke-width="3"/>
+              <path d="M359 208h290" stroke="#fff" stroke-opacity=".35" stroke-width="3"/>
+              <path d="M360 231h206M350 249h254" stroke="#3a2b45" stroke-opacity=".55" stroke-width="3"/>
             </g>
             <rect x="279" y="284" width="452" height="155" fill="url(#subway)"/>
-            <rect x="279" y="284" width="452" height="155" fill="#163d38" opacity=".12"/>
-            <path d="M279 284h452" stroke="#9d7650" stroke-width="5"/>
-            <g opacity=".5" stroke="#7cae9e" stroke-width="1">
+            <rect x="279" y="284" width="452" height="155" fill="#0a0714" opacity=".25"/>
+            <path d="M279 284h452" stroke="#4a3a58" stroke-width="5"/>
+            <g opacity=".45" stroke="#5a4a6e" stroke-width="1">
               <path d="M338 284v155M397 284v155M456 284v155M515 284v155M574 284v155M633 284v155M692 284v155"/>
               <path d="M279 326h452M279 368h452M279 410h452"/>
             </g>
-            <path d="M308 439h394" stroke="#845b39" stroke-width="6" stroke-linecap="round"/>
+            <path d="M308 439h394" stroke="#3a2b45" stroke-width="6" stroke-linecap="round"/>
             <!-- hanging utensils -->
-            <g stroke="#4f5851" stroke-width="3" stroke-linecap="round">
+            <g stroke="#6a6278" stroke-width="3" stroke-linecap="round">
               <path d="M713 292v36M734 292v48M756 292v33"/>
-              <path d="M706 328h15v20h-15Z" fill="#8c9d96"/>
-              <path d="M727 340h14l-2 21h-10Z" fill="#8c9d96"/>
+              <path d="M706 328h15v20h-15Z" fill="#8a8298"/>
+              <path d="M727 340h14l-2 21h-10Z" fill="#8a8298"/>
               <circle cx="756" cy="330" r="8" fill="none"/>
             </g>
 
             <!-- floor -->
             <rect y="480" width="1000" height="220" fill="url(#floorGrad)"/>
             <rect y="480" width="1000" height="220" fill="url(#floorTile)"/>
-            <path d="M0 480h1000" stroke="#061b19" stroke-width="8"/>
-            <path d="M0 486h1000" stroke="#d59d5e" stroke-width="3" opacity=".55"/>
-            <g opacity=".12" fill="#a8e2cf">
+            <path d="M0 480h1000" stroke="#050308" stroke-width="8"/>
+            <path d="M0 486h1000" stroke="#6a4a7a" stroke-width="3" opacity=".5"/>
+            <g opacity=".12" fill="#8fe6c8">
               <circle cx="94" cy="606" r="52"/>
               <circle cx="931" cy="570" r="76"/>
             </g>
 
-            <!-- rug -->
-            <ellipse cx="170" cy="601" rx="156" ry="47" fill="#4f2d26" opacity=".5"/>
-            <ellipse cx="170" cy="594" rx="148" ry="41" fill="#ec8f4c"/>
-            <ellipse cx="170" cy="594" rx="127" ry="30" fill="#f5b56f"/>
-            <path d="M56 590h228" stroke="#d67839" stroke-width="3" stroke-dasharray="11 10" opacity=".82"/>
+            <!-- ritual rug -->
+            <ellipse cx="170" cy="601" rx="156" ry="47" fill="#2a0e1a" opacity=".6"/>
+            <ellipse cx="170" cy="594" rx="148" ry="41" fill="#5a1830"/>
+            <ellipse cx="170" cy="594" rx="127" ry="30" fill="#7a2340"/>
+            <path d="M56 590h228" stroke="#b03a5a" stroke-width="3" stroke-dasharray="11 10" opacity=".82"/>
+            <circle cx="170" cy="594" r="24" fill="none" stroke="#d9b45c" stroke-width="1.5" opacity=".55"/>
+            <path d="m170 570 6 18 18 6-18 6-6 18-6-18-18-6 18-6 6-18Z" fill="none" stroke="#d9b45c" stroke-width="1.4" opacity=".5"/>
 
             <!-- grill base -->
             <g filter="url(#softShadow)">
-              <rect x="296" y="457" width="415" height="184" rx="24" fill="url(#steel)"/>
+              <rect x="296" y="457" width="415" height="184" rx="24" fill="#2a2233"/>
               <rect x="316" y="474" width="375" height="41" rx="13" fill="url(#steelDark)"/>
-              <rect x="329" y="482" width="349" height="21" rx="7" fill="#332b24"/>
-              <path d="M350 492h308" stroke="#12100e" stroke-width="3" stroke-linecap="round" stroke-dasharray="14 10"/>
-              <path d="M388 488v12M452 488v12M516 488v12M580 488v12M644 488v12" stroke="#665647" stroke-width="2" opacity=".4"/>
-              <rect x="319" y="533" width="369" height="84" rx="15" fill="#cfdad4"/>
-              <path d="M330 545h347" stroke="#fff" stroke-opacity=".75" stroke-width="2"/>
-              <rect x="348" y="558" width="132" height="39" rx="9" fill="#33433e"/>
-              <text x="414" y="583" text-anchor="middle" font-family="Archivo Black, Arial, sans-serif" font-size="15" letter-spacing="1" fill="#f7dbab">SMASH GRILL</text>
-              <g fill="#384a44" stroke="#f2f4ef" stroke-width="2">
+              <rect x="329" y="482" width="349" height="21" rx="7" fill="#120d18"/>
+              <path d="M350 492h308" stroke="#0a0710" stroke-width="3" stroke-linecap="round" stroke-dasharray="14 10"/>
+              <path d="M388 488v12M452 488v12M516 488v12M580 488v12M644 488v12" stroke="#6a5a78" stroke-width="2" opacity=".5"/>
+              <rect x="319" y="533" width="369" height="84" rx="15" fill="#3a3048"/>
+              <path d="M330 545h347" stroke="#d8d0c0" stroke-opacity=".35" stroke-width="2"/>
+              <rect x="348" y="558" width="132" height="39" rx="9" fill="#1a1424"/>
+              <text x="414" y="583" text-anchor="middle" font-family="Pirata One, Archivo Black, serif" font-size="20" letter-spacing="1" fill="#d9b45c">HELL GRILL</text>
+              <g fill="#241a2e" stroke="#b9b09c" stroke-width="2">
                 <circle cx="552" cy="577" r="14"/><circle cx="592" cy="577" r="14"/><circle cx="632" cy="577" r="14"/>
               </g>
-              <g fill="#ff7a42">
+              <g fill="#ff5a3a">
                 <rect x="544" y="570" width="5" height="14" rx="2"/><rect x="584" y="570" width="5" height="14" rx="2"/><rect x="624" y="570" width="5" height="14" rx="2"/>
               </g>
             </g>
-            <ellipse cx="506" cy="498" rx="137" ry="17" fill="#0d1110" opacity=".45"/>
-            <ellipse cx="506" cy="486" rx="145" ry="14" fill="#ff8a43" opacity=".15"/>
+            <ellipse cx="506" cy="498" rx="137" ry="17" fill="#050308" opacity=".55"/>
+            <ellipse cx="506" cy="486" rx="145" ry="14" fill="#ff5a3a" opacity=".18"/>
 
-            <!-- fryer station -->
+            <!-- cauldron station -->
             <g filter="url(#softShadow)">
-              <rect x="771" y="468" width="172" height="168" rx="21" fill="url(#steel)"/>
+              <rect x="771" y="468" width="172" height="168" rx="21" fill="#2a2233"/>
               <rect x="785" y="454" width="145" height="46" rx="12" fill="url(#steelDark)"/>
-              <rect x="798" y="461" width="119" height="26" rx="8" fill="#6b4b27"/>
-              <rect x="803" y="465" width="109" height="16" rx="6" fill="#e9a935"/>
-              <g fill="#ffd065">
-                <rect x="813" y="458" width="11" height="31" rx="4" transform="rotate(-7 813 458)"/>
-                <rect x="831" y="456" width="11" height="34" rx="4" transform="rotate(4 831 456)"/>
-                <rect x="849" y="459" width="11" height="29" rx="4" transform="rotate(-2 849 459)"/>
-                <rect x="867" y="456" width="11" height="33" rx="4" transform="rotate(8 867 456)"/>
-                <rect x="886" y="460" width="11" height="28" rx="4" transform="rotate(-5 886 460)"/>
+              <rect x="798" y="461" width="119" height="26" rx="8" fill="#1a1420"/>
+              <rect x="803" y="465" width="109" height="16" rx="6" fill="#3f6a4a"/>
+              <g fill="#8fe6c8" opacity=".8">
+                <circle cx="820" cy="470" r="3"/><circle cx="840" cy="467" r="2"/><circle cx="860" cy="472" r="3"/>
+                <circle cx="890" cy="468" r="2"/><circle cx="905" cy="473" r="2.5"/>
               </g>
-              <path d="M811 475h79" stroke="#4d311b" stroke-width="2" opacity=".5"/>
-              <rect x="790" y="518" width="134" height="97" rx="13" fill="#c5d1cb"/>
-              <g fill="#40534c" stroke="#eff3ef" stroke-width="2">
+              <g fill="#b9b09c" opacity=".75">
+                <rect x="813" y="458" width="7" height="25" rx="3" transform="rotate(-7 813 458)"/>
+                <rect x="831" y="456" width="7" height="28" rx="3" transform="rotate(4 831 456)"/>
+                <rect x="849" y="459" width="7" height="23" rx="3" transform="rotate(-2 849 459)"/>
+                <rect x="867" y="456" width="7" height="27" rx="3" transform="rotate(8 867 456)"/>
+                <rect x="886" y="460" width="7" height="22" rx="3" transform="rotate(-5 886 460)"/>
+              </g>
+              <path d="M811 475h79" stroke="#0a0710" stroke-width="2" opacity=".6"/>
+              <rect x="790" y="518" width="134" height="97" rx="13" fill="#3a3048"/>
+              <g fill="#241a2e" stroke="#b9b09c" stroke-width="2">
                 <circle cx="820" cy="553" r="11"/><circle cx="870" cy="553" r="11"/><circle cx="920" cy="553" r="11"/>
               </g>
-              <path d="M790 585h134" stroke="#75877f" stroke-width="2"/>
-              <path d="M810 604h95" stroke="#75877f" stroke-width="3" stroke-linecap="round"/>
-              <path d="M817 607h80" stroke="#e6eee9" stroke-width="2" stroke-linecap="round"/>
+              <path d="M790 585h134" stroke="#5a5266" stroke-width="2"/>
+              <path d="M810 604h95" stroke="#5a5266" stroke-width="3" stroke-linecap="round"/>
+              <path d="M817 607h80" stroke="#d8d0c0" stroke-width="2" stroke-linecap="round" opacity=".6"/>
             </g>
-            <ellipse cx="856" cy="481" rx="64" ry="12" fill="#ffbd54" opacity=".12"/>
+            <ellipse cx="856" cy="481" rx="64" ry="12" fill="#8fe6c8" opacity=".18"/>
 
             <!-- prep shelf and boxes left of grill -->
             <g filter="url(#softShadow)">
-              <rect x="0" y="430" width="219" height="16" rx="4" fill="#825633"/>
-              <path d="M25 446v40M199 446v40" stroke="#5e3d28" stroke-width="8"/>
-              <rect x="20" y="389" width="67" height="41" rx="5" fill="#f0cf9d"/>
-              <path d="M29 400h48M29 409h38M29 418h45" stroke="#d4a971" stroke-width="2"/>
-              <rect x="101" y="397" width="56" height="33" rx="15" fill="#e75d39"/>
-              <path d="M157 405c16 0 18 20 2 20" fill="none" stroke="#e75d39" stroke-width="7"/>
-              <path d="M116 389v42M127 385v46M139 389v42" stroke="#f7dfb3" stroke-width="4"/>
+              <rect x="0" y="430" width="219" height="16" rx="4" fill="#3a2b45"/>
+              <path d="M25 446v40M199 446v40" stroke="#241a2e" stroke-width="8"/>
+              <rect x="20" y="389" width="67" height="41" rx="5" fill="#b9b09c"/>
+              <path d="M29 400h48M29 409h38M29 418h45" stroke="#6a5a78" stroke-width="2"/>
+              <rect x="101" y="397" width="56" height="33" rx="15" fill="#6a2a44"/>
+              <path d="M157 405c16 0 18 20 2 20" fill="none" stroke="#6a2a44" stroke-width="7"/>
+              <path d="M116 389v42M127 385v46M139 389v42" stroke="#b9b09c" stroke-width="4"/>
             </g>
 
             <!-- small details -->
-            <g fill="#f7e8c8" opacity=".8">
+            <g fill="#d9b45c" opacity=".7">
               <circle cx="922" cy="434" r="3"/><circle cx="56" cy="450" r="3"/><circle cx="955" cy="333" r="2.5"/>
             </g>
-            <path d="M465 330c0-19 14-33 33-33s33 14 33 33" fill="none" stroke="#f6d89d" stroke-opacity=".3" stroke-width="2"/>
+            <path d="M465 330c0-19 14-33 33-33s33 14 33 33" fill="none" stroke="#8fe6c8" stroke-opacity=".22" stroke-width="2"/>
           </svg>
 
           <div class="scene-shade" aria-hidden="true"></div>
@@ -300,9 +346,9 @@
           <div class="order-rail" aria-label="Open orders">
             <div class="rail-label">
               <span class="live-dot"></span>
-              <span>Live orders</span>
+              <span>Restless orders</span>
               <span class="rail-count" id="queueCount">2 / 3</span>
-              <span class="rail-hint">auto-served when full</span>
+              <span class="rail-hint">paid when filled</span>
             </div>
             <div class="tickets" id="tickets"></div>
           </div>
@@ -314,40 +360,40 @@
               <svg class="burger" viewBox="0 0 300 220">
                 <defs>
                   <linearGradient id="bunTop" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#ffd581"/><stop offset=".6" stop-color="#f3a94d"/><stop offset="1" stop-color="#d77b2f"/>
+                    <stop offset="0" stop-color="#b184c9"/><stop offset=".6" stop-color="#7c4a9e"/><stop offset="1" stop-color="#4a2768"/>
                   </linearGradient>
                   <linearGradient id="bunBottom" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#e89b43"/><stop offset="1" stop-color="#b85f25"/>
+                    <stop offset="0" stop-color="#8a5aa8"/><stop offset="1" stop-color="#43245f"/>
                   </linearGradient>
                   <linearGradient id="pattyGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#77402d"/><stop offset=".5" stop-color="#4e271c"/><stop offset="1" stop-color="#321710"/>
+                    <stop offset="0" stop-color="#5c3148"/><stop offset=".5" stop-color="#371a2b"/><stop offset="1" stop-color="#1d0b17"/>
                   </linearGradient>
                   <linearGradient id="cheeseGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#ffe07d"/><stop offset="1" stop-color="#f6b62f"/>
+                    <stop offset="0" stop-color="#ddff9c"/><stop offset="1" stop-color="#8fe05f"/>
                   </linearGradient>
                   <radialGradient id="burgerSheen" cx=".32" cy=".2" r=".65">
-                    <stop offset="0" stop-color="#fff7dc" stop-opacity=".75"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/>
+                    <stop offset="0" stop-color="#f3e6ff" stop-opacity=".7"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/>
                   </radialGradient>
                 </defs>
-                <ellipse cx="150" cy="208" rx="106" ry="12" fill="#32170f" opacity=".34"/>
+                <ellipse cx="150" cy="208" rx="106" ry="12" fill="#07030c" opacity=".55"/>
                 <g class="burger-stack">
                   <path d="M46 181c0-8 7-14 15-14h178c9 0 15 6 15 14v9c0 10-8 17-19 17H65c-11 0-19-7-19-17v-9Z" fill="url(#bunBottom)"/>
-                  <path d="M59 187c17 5 44 7 91 7s74-2 91-7" fill="none" stroke="#f9bf6e" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
-                  <path d="M37 154c22 5 45 8 71 7 24-1 38-8 55-8 21 0 42 8 69 8 14 0 25-2 35-5l-4 14c-29 12-66 17-103 17S59 177 36 166l1-12Z" fill="#5d9e55"/>
-                  <path d="M41 150c30 13 63 19 102 19 40 0 75-6 115-21l-6 17c-31 10-68 16-108 16-37 0-72-5-99-14l-4-17Z" fill="#7cc267"/>
+                  <path d="M59 187c17 5 44 7 91 7s74-2 91-7" fill="none" stroke="#c9a6e0" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M37 154c22 5 45 8 71 7 24-1 38-8 55-8 21 0 42 8 69 8 14 0 25-2 35-5l-4 14c-29 12-66 17-103 17S59 177 36 166l1-12Z" fill="#3f6a52"/>
+                  <path d="M41 150c30 13 63 19 102 19 40 0 75-6 115-21l-6 17c-31 10-68 16-108 16-37 0-72-5-99-14l-4-17Z" fill="#5c8f6a"/>
                   <path d="m64 140 50 7-16 12 48-8 49 7-14-14 58-5-5 22c-30 8-60 12-93 12-35 0-68-4-96-12l19-21Z" fill="url(#cheeseGrad)"/>
-                  <path d="M80 163c5 15 7 24 5 33M143 165c5 13 6 21 4 31M209 162c-3 14-2 21 0 30" stroke="#f4b42f" stroke-width="9" stroke-linecap="round"/>
+                  <path d="M80 163c5 15 7 24 5 33M143 165c5 13 6 21 4 31M209 162c-3 14-2 21 0 30" stroke="#9be36a" stroke-width="9" stroke-linecap="round"/>
                   <rect x="41" y="124" width="218" height="29" rx="14.5" fill="url(#pattyGrad)"/>
-                  <path d="M55 129h190" stroke="#a76647" stroke-width="4" stroke-linecap="round" opacity=".52"/>
-                  <path d="M55 145h190" stroke="#210d08" stroke-width="3" stroke-linecap="round" opacity=".44"/>
-                  <g fill="#f06b4d">
+                  <path d="M55 129h190" stroke="#8f5a72" stroke-width="4" stroke-linecap="round" opacity=".52"/>
+                  <path d="M55 145h190" stroke="#120610" stroke-width="3" stroke-linecap="round" opacity=".44"/>
+                  <g fill="#d23a52">
                     <circle cx="91" cy="119" r="14"/><circle cx="131" cy="120" r="13"/><circle cx="169" cy="119" r="14"/><circle cx="207" cy="120" r="12"/>
-                    <circle cx="91" cy="119" r="4" fill="#ffd8a9" opacity=".55"/><circle cx="131" cy="120" r="4" fill="#ffd8a9" opacity=".55"/><circle cx="169" cy="119" r="4" fill="#ffd8a9" opacity=".55"/>
+                    <circle cx="91" cy="119" r="4" fill="#ffc2ce" opacity=".55"/><circle cx="131" cy="120" r="4" fill="#ffc2ce" opacity=".55"/><circle cx="169" cy="119" r="4" fill="#ffc2ce" opacity=".55"/>
                   </g>
                   <path d="M34 105c8-42 49-67 116-67 68 0 109 25 117 67 1 9-5 16-15 16H49c-10 0-16-7-15-16Z" fill="url(#bunTop)"/>
                   <path d="M34 105c8-42 49-67 116-67 68 0 109 25 117 67 1 9-5 16-15 16H49c-10 0-16-7-15-16Z" fill="url(#burgerSheen)"/>
-                  <path d="M54 95c10-32 45-48 97-48 44 0 81 15 94 40" fill="none" stroke="#ffe1a0" stroke-opacity=".48" stroke-width="4" stroke-linecap="round"/>
-                  <g fill="#fff2c2">
+                  <path d="M54 95c10-32 45-48 97-48 44 0 81 15 94 40" fill="none" stroke="#e6d0f7" stroke-opacity=".48" stroke-width="4" stroke-linecap="round"/>
+                  <g fill="#efe2ff">
                     <ellipse cx="94" cy="62" rx="5" ry="3" transform="rotate(-21 94 62)"/>
                     <ellipse cx="128" cy="48" rx="5" ry="3" transform="rotate(7 128 48)"/>
                     <ellipse cx="165" cy="53" rx="5" ry="3" transform="rotate(-13 165 53)"/>
@@ -355,83 +401,83 @@
                     <ellipse cx="74" cy="84" rx="4.5" ry="2.6" transform="rotate(-34 74 84)"/>
                     <ellipse cx="144" cy="73" rx="4.5" ry="2.6" transform="rotate(10 144 73)"/>
                   </g>
-                  <path d="M38 109c13 5 31 7 55 8 30 1 66-4 98-8 27-3 47-2 65 2" fill="none" stroke="#b96428" stroke-opacity=".35" stroke-width="2"/>
+                  <path d="M38 109c13 5 31 7 55 8 30 1 66-4 98-8 27-3 47-2 65 2" fill="none" stroke="#2c1436" stroke-opacity=".5" stroke-width="2"/>
                 </g>
               </svg>
             </span>
             <span class="grill-cta"><span class="space-key">SPACE</span> TAP TO COOK</span>
           </button>
 
-          <button class="pet" id="petBtn" type="button" aria-label="Nugget the corgi. Click for Zoomies.">
+          <button class="pet" id="petBtn" type="button" aria-label="Nugget the ghost cat. Click for Zoomies.">
             <span class="pet-aura" aria-hidden="true"></span>
-            <span class="pet-bubble" id="petBubble" aria-hidden="true">BORK!</span>
+            <span class="pet-bubble" id="petBubble" aria-hidden="true">MEOW!</span>
             <svg class="pet-svg" viewBox="0 0 220 210" aria-hidden="true">
-              <ellipse cx="112" cy="193" rx="65" ry="12" fill="#251208" opacity=".3"/>
+              <ellipse cx="112" cy="197" rx="64" ry="11" fill="#050308" opacity=".35"/>
               <g class="tail">
-                <path d="M61 145c-24-1-34-19-23-33 11-14 37-4 35 13-1 8-8 12-14 9" fill="none" stroke="#d47b35" stroke-width="17" stroke-linecap="round"/>
-                <path d="M61 145c-17-2-25-14-19-24" fill="none" stroke="#f3a950" stroke-width="7" stroke-linecap="round" opacity=".65"/>
+                <path d="M160 172c26-3 38-21 28-38-9-16-31-13-34 3-2 10 6 16 14 13" fill="none" stroke="#bcd8de" stroke-width="15" stroke-linecap="round"/>
+                <path d="M160 172c19-2 29-15 24-27" fill="none" stroke="#e4f6f8" stroke-width="5" stroke-linecap="round" opacity=".7"/>
               </g>
-              <path d="M71 119c6-21 23-33 47-34 30-1 49 16 54 45l5 38c2 15-10 27-25 27H91c-15 0-26-12-25-27l5-49Z" fill="#d77c35"/>
-              <path d="M105 97c4-13 13-20 24-20s21 7 25 20l5 19-54-3 0-16Z" fill="#f7c679"/>
-              <path d="M79 132c-7 7-10 17-9 28l3 32c1 10 9 17 19 17h17c12 0 20-10 18-22l-5-33c-2-12-7-22-15-28l-28 6Z" fill="#f6e2c2"/>
-              <path d="M161 139c6 13 5 31 3 43-1 9-7 15-16 17-9 2-17-3-19-12l-4-19 36-29Z" fill="#e58a3f"/>
-              <path d="M135 176c-7 0-12 5-12 12s5 11 12 11 12-4 12-11-5-12-12-12Z" fill="#f6ddbc"/>
-              <path d="M98 181c-3-6-11-8-18-5-7 3-10 10-7 16 3 7 11 9 18 6 7-3 10-10 7-17Z" fill="#f4d8b5"/>
-              <path d="M88 202c-8 1-16-1-20-4" stroke="#b96932" stroke-width="3" stroke-linecap="round"/>
-              <path d="M139 199c7 0 13-2 17-5" stroke="#b96932" stroke-width="3" stroke-linecap="round"/>
-              <path d="M99 171c11 5 29 5 42 0" stroke="#c56d30" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+              <path d="M68 178c-5-38 5-66 25-81 13-10 32-10 45 0 20 15 30 43 25 81-1 12-10 19-22 19H90c-12 0-21-7-22-19Z" fill="#c3dde2"/>
+              <path d="M97 106c4-13 9-21 17-25 9 4 15 12 19 25l-3 54c-10 5-23 5-33 0l0-54Z" fill="#e8f7f8"/>
+              <path d="M80 170c-3-17 1-32 9-43 4-6 11-6 15-2 5 5 4 12 1 18-6 11-8 20-7 33l-18-6Z" fill="#d4e9ec"/>
+              <path d="M154 170c3-17-1-32-9-43-4-6-11-6-15-2-5 5-4 12-1 18 6 11 8 20 7 33l18-6Z" fill="#d4e9ec"/>
+              <path d="M88 178c-6 0-11 5-11 11s5 9 11 9h11c6 0 10-3 10-9s-4-11-10-11H88Z" fill="#e8f7f8"/>
+              <path d="M125 178c-6 0-11 5-11 11s5 9 11 9h11c6 0 10-3 10-9s-4-11-10-11h-11Z" fill="#e8f7f8"/>
+              <path d="M84 192c-9 7-7 14 2 16M146 192c9 7 7 14-2 16" fill="none" stroke="#7fe3c4" stroke-width="2" stroke-linecap="round" opacity=".35"/>
               <!-- head -->
               <g class="head">
-                <path d="M86 66 73 29c-2-8 6-14 13-10l37 25-37 22Z" fill="#ce7131"/>
-                <path d="M167 62l15-35c3-8-5-15-13-11l-37 25 35 21Z" fill="#ce7131"/>
-                <path d="M88 61 81 38c-1-5 4-8 8-5l24 16-25 12Z" fill="#f0a35e"/>
-                <path d="M164 57l9-23c2-5-3-9-7-6l-24 16 22 13Z" fill="#f0a35e"/>
-                <path d="M87 75c-2-20 13-36 34-37 25-1 40 13 42 34 2 24-14 43-37 44-24 1-38-17-39-41Z" fill="#e08a40"/>
-                <path d="M98 70c10 4 19 4 28-1l-4 27c-7 7-18 6-24-1l0-25Z" fill="#fae6c8"/>
-                <path d="M151 69c-7 4-14 4-22 0l4 24c6 7 15 5 18-2l0-22Z" fill="#fae6c8"/>
-                <path d="M95 87c-4 16 6 30 21 33 14 2 27-7 30-20l-5-15c-15 7-32 8-46 2Z" fill="#f7dfc0"/>
+                <path d="M78 70 65 30c-2-8 7-13 14-9l34 21-35 28Z" fill="#bcd8de"/>
+                <path d="M162 68l14-38c3-8-6-14-13-10l-35 22 34 26Z" fill="#bcd8de"/>
+                <path d="M82 63 75 40c-1-5 4-8 8-5l22 14-23 14Z" fill="#8f6fa6"/>
+                <path d="M159 61l9-23c2-5-3-9-7-6l-22 15 20 14Z" fill="#8f6fa6"/>
+                <path d="M82 78c-2-23 12-40 34-41 25-1 40 15 41 38 1 26-15 45-39 46-25 1-35-19-36-43Z" fill="#cfe3e8"/>
+                <path d="M110 64c5-3 11-3 16 0" fill="none" stroke="#8f6fa6" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+                <path d="M99 88c9 4 18 4 27 0l-3 22c-6 7-16 6-21-1l-3-21Z" fill="#eaf8f8"/>
+                <circle cx="103" cy="80" r="10" fill="#7ff0d8" opacity=".16"/>
+                <circle cx="147" cy="79" r="10" fill="#7ff0d8" opacity=".16"/>
                 <g class="eyes">
-                  <ellipse cx="111" cy="79" rx="5.5" ry="7" fill="#24130d"/>
-                  <ellipse cx="152" cy="78" rx="5.5" ry="7" fill="#24130d"/>
-                  <circle cx="112.5" cy="76.5" r="1.8" fill="#fff7e2"/>
-                  <circle cx="153.5" cy="75.5" r="1.8" fill="#fff7e2"/>
+                  <path d="M95 80c3-6 12-6 15 0-3 6-12 6-15 0Z" fill="#7ff0d8"/>
+                  <path d="M140 79c3-6 12-6 15 0-3 6-12 6-15 0Z" fill="#7ff0d8"/>
+                  <ellipse cx="102.5" cy="80" rx="1.8" ry="5" fill="#10221f"/>
+                  <ellipse cx="147.5" cy="79" rx="1.8" ry="5" fill="#10221f"/>
+                  <circle cx="105" cy="77" r="1.4" fill="#f2fffb"/>
+                  <circle cx="150" cy="76" r="1.4" fill="#f2fffb"/>
                 </g>
-                <path d="M128 91c1-4 6-6 10-5 5 1 8 4 7 7-1 4-6 6-10 5-4-1-8-3-7-7Z" fill="#26130f"/>
-                <path d="M134 103c2 6 8 9 14 7 4-1 7-4 8-8" fill="none" stroke="#45231a" stroke-width="2.5" stroke-linecap="round"/>
-                <path d="M138 108c3 4 9 3 11-1" fill="#ee6d72"/>
-                <g stroke="#a95427" stroke-width="2" stroke-linecap="round" opacity=".55">
-                  <path d="M88 90c-11 1-16 6-17 12M88 96c-9 1-13 5-14 9"/>
-                  <path d="M174 78c10 1 15 6 15 12M175 85c8 2 12 5 12 9"/>
+                <path d="M120 94c1-3 5-4 8-3 3 1 5 3 4 5-1 3-5 4-8 3-3-1-5-3-4-5Z" fill="#d98aa8"/>
+                <path d="M124 101c1 5 6 7 11 5M124 101c-1 5-6 7-11 5" fill="none" stroke="#6a5a78" stroke-width="2" stroke-linecap="round"/>
+                <g stroke="#9a8fa8" stroke-width="2" stroke-linecap="round" opacity=".55">
+                  <path d="M94 92c-11 0-17 4-19 9M94 97c-9 0-14 3-15 7"/>
+                  <path d="M158 91c11 0 17 4 19 9M158 96c9 0 14 3 15 7"/>
                 </g>
               </g>
-              <path d="M90 118c14-4 27-5 39-2" fill="none" stroke="#2e7770" stroke-width="11" stroke-linecap="round"/>
-              <path d="M90 118c14-4 27-5 39-2" fill="none" stroke="#56a89e" stroke-width="4" stroke-linecap="round" opacity=".8"/>
-              <circle cx="130" cy="116" r="10" fill="#ffc447" stroke="#9e6a1f" stroke-width="2"/>
-              <path d="m127 111 2.5 4 4 .5-3 3 .7 4-3.7-2.2-3.8 2.2.7-4-3-3 4.1-.5 2.5-4Z" fill="#7c4e13"/>
+              <path d="M93 118c13-5 26-6 39-2" fill="none" stroke="#2a5a66" stroke-width="10" stroke-linecap="round"/>
+              <path d="M93 118c13-5 26-6 39-2" fill="none" stroke="#7fe3c4" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+              <circle cx="132" cy="116" r="10" fill="#d9b45c" stroke="#7a5a20" stroke-width="2"/>
+              <path d="m129 111 2.5 4 4 .5-3 3 .7 4-3.7-2.2-3.8 2.2.7-4-3-3 4.1-.5 2.5-4Z" fill="#4a3410"/>
             </svg>
             <span class="pet-tag"><span class="pet-ready-dot"></span>NUGGET <em id="petHint">click for zoomies</em></span>
           </button>
 
           <div class="first-hint" id="firstHint">
             <span class="hint-arrow">↘</span>
-            <span>Tap the grill to cook. Full tickets pay out.</span>
+            <span>Tap the grill to cook. Full tickets feed the dead.</span>
           </div>
 
           <div class="bottom-hud">
             <div class="stock-chip">
-              <span>Patties cooked</span>
+              <span>Cursed patties</span>
               <b><span id="stockCount">0</span><small> total</small></b>
             </div>
             <div class="heat-panel">
               <div class="heat-top">
-                <span><i class="flame-ico" aria-hidden="true">▲</i> Sizzle meter</span>
+                <span><i class="flame-ico" aria-hidden="true">▲</i> Hellfire meter</span>
                 <b id="sizzleMult">x1.00</b>
               </div>
-              <div class="heat-track" role="progressbar" aria-label="Sizzle meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heatTrack">
+              <div class="heat-track" role="progressbar" aria-label="Hellfire meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="heatTrack">
                 <i id="heatFill"></i>
                 <span class="heat-ticks" aria-hidden="true"><em></em><em></em><em></em><em></em></span>
               </div>
-              <small id="heatHint">Tap fast to boost order tips</small>
+              <small id="heatHint">Tap fast to stoke the hellfire</small>
             </div>
             <button class="zoom-btn" id="zoomBtn" type="button" aria-label="Activate Nugget's Zoomies">
               <span class="zoom-icon" aria-hidden="true">
@@ -444,14 +490,14 @@
         </div>
       </section>
 
-      <aside class="sidebar" aria-label="Kitchen upgrades and achievements">
+      <aside class="sidebar" aria-label="Crypt upgrades and achievements">
         <div class="side-head">
-          <div class="eyebrow">Kitchen log · Shift 01</div>
+          <div class="eyebrow">Crypt log · Shift 01</div>
           <div class="side-title-row">
-            <h1>Build your burger empire.</h1>
+            <h1>Build your crypt empire.</h1>
             <span class="shift-badge" id="shiftBadge">SHIFT 01</span>
           </div>
-          <p id="sideSub">Spend tips on the line. Every upgrade makes the next rush a little easier.</p>
+          <p id="sideSub">Spend souls on the line. Every upgrade makes the next rush a little easier.</p>
         </div>
 
         <div class="tabs" role="tablist" aria-label="Panels">
@@ -463,7 +509,7 @@
           <div class="upgrade-list" id="upgradeList"></div>
           <div class="pet-note">
             <span class="mini-paw" aria-hidden="true">🐾</span>
-            <div><b>Nugget is on shift.</b><span>Click the corgi or use Zoomies to double your output for a few seconds.</span></div>
+            <div><b>Nugget is on shift.</b><span>Click the ghost cat or use Zoomies to double your output for a few seconds.</span></div>
           </div>
         </div>
 
@@ -478,12 +524,12 @@
         <div class="franchise" id="franchiseCard">
           <div class="franchise-top">
             <div>
-              <span class="micro-label">Franchise plan</span>
-              <b class="franchise-name" id="franchiseName">The Original</b>
+              <span class="micro-label">Crypt plan</span>
+              <b class="franchise-name" id="franchiseName">The Original Crypt</b>
             </div>
             <span class="star-count">★ <b id="starCount">0</b></span>
           </div>
-          <p id="franchiseDesc">Bank $3,000 this shift to unlock your first franchise. Keep every badge.</p>
+          <p id="franchiseDesc">Bank $3,000 this shift to raise your first crypt. Keep every badge.</p>
           <div class="goal-track" id="franchiseTrack"><i id="franchiseBar"></i></div>
           <div class="franchise-bottom">
             <span id="franchiseProgress">$0 / $3,000</span>
@@ -493,7 +539,7 @@
       </aside>
     </main>
     <footer class="site-foot">
-      <span>Made with fire, cheese, and one very fast corgi.</span>
+      <span>Made with fire, grave dust, and one very fast ghost cat.</span>
       <span class="foot-dot">●</span>
       <span id="saveStatus">Autosaves locally</span>
     </footer>
@@ -502,22 +548,22 @@
   <div class="modal-layer" id="helpModal" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
       <button class="modal-close" type="button" data-close="helpModal" aria-label="Close">×</button>
-      <div class="eyebrow">Employee handbook</div>
-      <h2 id="helpTitle">Run the late shift.</h2>
-      <p class="modal-lead">Fryday is open until 2am. The regulars are hungry, the grill is hot, and Nugget is technically the manager.</p>
+      <div class="eyebrow">Gravekeeper handbook</div>
+      <h2 id="helpTitle">Run the midnight shift.</h2>
+      <p class="modal-lead">The Graveyard Grill is open until dawn. The regulars are restless, the hellfire is hot, and Nugget is technically the manager.</p>
       <div class="how-list">
-        <div class="how-step"><span>01</span><div><b>Cook the patties</b><p>Tap the burger or press <kbd>Space</kbd>. Every tap fills the oldest ticket. Upgrades add auto-grill output.</p></div></div>
-        <div class="how-step"><span>02</span><div><b>Cash the tickets</b><p>When a ticket fills, it pays out automatically. Keep the queue moving before it backs up.</p></div></div>
-        <div class="how-step"><span>03</span><div><b>Stack the sizzle</b><p>Fast tapping heats the meter and multiplies every ticket payout. It cools down when you stop.</p></div></div>
-        <div class="how-step"><span>04</span><div><b>Send in the corgi</b><p>Tap Nugget for Zoomies: double output for a short burst. Pet treats make it last longer and hit harder.</p></div></div>
+        <div class="how-step"><span>01</span><div><b>Cook the cursed patties</b><p>Tap the burger or press <kbd>Space</kbd>. Every tap fills the oldest ticket. Upgrades add haunted auto-grill output.</p></div></div>
+        <div class="how-step"><span>02</span><div><b>Cash the souls</b><p>When a ticket fills, it pays out automatically. Keep the queue moving before the dead get impatient.</p></div></div>
+        <div class="how-step"><span>03</span><div><b>Stoke the hellfire</b><p>Fast tapping heats the meter and multiplies every ticket payout. It cools down when you stop.</p></div></div>
+        <div class="how-step"><span>04</span><div><b>Send in the ghost cat</b><p>Tap Nugget or press <kbd>Z</kbd> for Zoomies: double output for a short burst. Spirit treats make it last longer and hit harder.</p></div></div>
       </div>
       <div class="modal-tip">
         <span aria-hidden="true">★</span>
-        <p>Unlock upgrades as you serve more orders, then open a franchise to reset the shift with a permanent bonus. Achievements stick around forever.</p>
+        <p>Unlock upgrades as you serve more souls, then raise a new crypt to reset the shift with a permanent bonus. Achievements stick around forever.</p>
       </div>
       <div class="modal-actions">
         <button class="text-btn" id="resetBtn" type="button">Erase save</button>
-        <button class="primary-btn" type="button" data-close="helpModal">Let's cook</button>
+        <button class="primary-btn" type="button" data-close="helpModal">Let's haunt</button>
       </div>
     </div>
   </div>
@@ -525,8 +571,8 @@
   <div class="modal-layer" id="franchiseModal" hidden>
     <div class="modal compact-modal" role="dialog" aria-modal="true" aria-labelledby="franchiseTitle">
       <button class="modal-close" type="button" data-close="franchiseModal" aria-label="Close">×</button>
-      <div class="eyebrow">Franchise opportunity</div>
-      <h2 id="franchiseTitle">Ready for a second location?</h2>
+      <div class="eyebrow">Crypt opportunity</div>
+      <h2 id="franchiseTitle">Ready to raise a second crypt?</h2>
       <p class="modal-lead" id="franchiseModalText">You will reset this shift's cash and upgrades, keep every achievement, and earn a permanent output bonus.</p>
       <div class="franchise-preview">
         <div><span>Permanent bonus</span><b id="franchiseBonusPreview">+35%</b></div>
@@ -535,7 +581,7 @@
       </div>
       <div class="modal-actions">
         <button class="text-btn" type="button" data-close="franchiseModal">Not yet</button>
-        <button class="primary-btn" id="confirmFranchise" type="button">Open the next FRYDAY</button>
+        <button class="primary-btn" id="confirmFranchise" type="button">Raise the next crypt</button>
       </div>
     </div>
   </div>
@@ -544,8 +590,8 @@
     <div class="modal compact-modal" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
       <button class="modal-close" type="button" data-close="resetModal" aria-label="Close">×</button>
       <div class="eyebrow">Close forever</div>
-      <h2 id="resetTitle">Wipe the whole kitchen?</h2>
-      <p class="modal-lead">This erases your cash, upgrades, achievements, and every franchise. There is no undo — Nugget will be sad.</p>
+      <h2 id="resetTitle">Banish the whole crypt?</h2>
+      <p class="modal-lead">This erases your cash, upgrades, achievements, and every crypt. There is no undo — Nugget will haunt you.</p>
       <div class="modal-actions">
         <button class="text-btn" type="button" data-close="resetModal">Keep cooking</button>
         <button class="danger-btn" id="confirmReset" type="button">Erase everything</button>
